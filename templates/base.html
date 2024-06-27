@@ -1,0 +1,92 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+  <meta charset="utf-8">
+  {% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1">{% endblock %}
+  <title>
+    {% block title %}{% endblock %}
+    {{ site.name }} 
+    {% block extra_title %}{% endblock %}
+  </title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=4">
+  {% block site_styles %}{% endblock %}
+  <meta name="description" content="{% block description %}{% endblock %}">
+
+  <!-- to do: make template tag to handle this better -->
+  <meta property="og:title" content="{{ site.name }} {% block og_title %}{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">  
+  {% block extra_meta %}{% endblock extra_meta %}
+  {% block canonical %}{% endblock %}
+
+  <link rel="icon" href="{% static 'img/favicon.png' %}" sizes="any">
+  <link rel="icon" href="{% static 'img/icon.svg' %}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{% static 'img/touch-icon.png' %}">
+  
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color -->
+  <meta name="theme-color" content="#010101">
+
+  <link rel="profile" href="http://microformats.org/profile/hcard">
+  <script defer src="https://cdn.jsdelivr.net/npm/@imacrayon/alpine-ajax@0.6.0/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.11.1/dist/cdn.min.js"></script>
+  {% block extrahead %}{% endblock %}
+  {% block feeds %}{% endblock %}
+</head>
+
+<body id="{% block bodyid %}{% endblock %}" class="{% block bodyclass %}{% endblock %}">
+  <header role="banner">
+    {% block banner %}
+        {% block site_name %}
+          <h1 class="site-name">
+            <a href="/" title="Home">
+              {% block logo %}{{ site.name }}{% endblock %}
+            </a>
+          </h1>
+          <h2>Compiling and aggregating civic tech jobs from across the <a href="http://digitalservicescoalition.org">Digital Services Coaltion</a> firms</h2>
+          {% block nav_tagline %}{% endblock %}
+        {% endblock %}
+    {% endblock %}
+    {% block banner_nav %}{% endblock %}
+  </header>
+  <div id="wrapper">
+    {% block messages %}
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+    {% endblock %}{#-- end messages --#}
+    {% block content_top %}{% endblock %}
+    <main>{% block content %}{% endblock %}</main>
+    <div role="complementary">{% block complementary %}{% endblock %}</div>
+    {% block content_bottom %}{% endblock %}
+  </div>
+
+  <footer id="footer" role="contentinfo">
+    {% block footer_nav %}
+      <nav role="navigation">
+        {# uncomment if you want it #}
+        {# include 'includes/site_nav.html' #}
+      </nav>
+    {% endblock %}
+    {% block footer %}
+      <div>
+        <p class="copyright">&copy; {{ now.year }} {{ site.name }}</p>
+      </div>
+    {% endblock %}
+  </footer>
+
+  {% block init_js %}{% endblock %}
+  {% block site_js %}
+    <script src="{% static 'js/site.js' %}"></script>
+  {% endblock %}
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block bodyclass %}details{% endblock %}
+
+{% block content %}
+
+
+<h4>{{ job.company }}</h4>
+<h3><a href="{{ job.link }}">{{ job.title }}</a></h3>
+<td>{{ job.location }}</td>
+<td>{{ job.pub_date|default_if_none:"" }}</td>
+<td>{{ job.salary|default_if_none:"" }}</td>
+                <form action="{% url 'reject_job' %}" method="post">
+                    {% csrf_token %}
+                    <input
+                      id="id"
+                      type="hidden"
+                      name="id"
+                      value=" {{ job.id }}" />
+                    <input type="submit" value="Reject" />
+                  </form>
+    <article class="job-details">
+        <iframe src="{{ job.get_source_url }}"></iframe>
+          <article>{{ job.details }}</article>
+
+
+{% endblock %}
+
+

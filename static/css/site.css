@@ -1,0 +1,78 @@
+@import "modern-normalize.css";
+
+/****************** THEME & VARS ******************/
+:root {
+  --max_width: 90vw;
+}
+
+/* quick reset. See https://mattbrictson.com/blog/css-normalize-and-reset */
+:root {
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, figure, p, ol, ul {
+  margin: 0;
+}
+
+ol, ul {
+  list-style: none;
+  padding-inline: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img {
+  display: block;
+  max-inline-size: 100%;
+}
+/********* End reset *******/
+
+[role=banner] {
+  display: flex;
+  align-items: center;
+  margin: 1.5em auto 1em;
+  justify-content: flex-start;
+  width: var(--max_width);
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5em
+}
+
+[role="banner"] h1 {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 2em
+}
+[role="banner"] h2 {
+  margin-top: 0.25em;
+}
+
+.job-list {
+    border-collapse: collapse;
+    width: var(--max_width);
+    margin: 0 auto 1em;
+
+    caption {
+      text-align: left;
+      font-weight: bold;
+      font-size: 1.25em
+    }
+    th, td { 
+        max-width: 700px;
+        padding: 0.5em 1em;
+        border: 1px solid #eee;
+    }
+    th {background: #eee}
+    td { font-size: 0.875em}
+    .status-1 { background: #FFFFE0}  /* Considering */
+    .status-2 { background: #87CEEB } /* Applied */
+    .status-3 {background: #D8BFD8}
+    .status-3 {background: #90EE90}
+}
+
+.details main {
+    max-width: 100ch;
+    margin: auto
+}

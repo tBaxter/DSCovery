@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for company, company_job_list in jobs_list.items %}
+    <table class="job-list">
+        <caption>{{ company }}</caption>
+        <thead>
+            <tr>
+            <th colspan="2">Job</th>
+            <th>Location</th>
+            <th>Found</th>
+            </tr>
+        </thead>
+        {% include 'includes/job_list_body.html' %} 
+    </table>
+    {% endfor %}
+{% endblock %}
+
+{% block init_js %}
+<script>
+    document.addEventListener('alpine:init', () => {
+        const dropdown = document.querySelector('select[name="status"]');
+        document.querySelectorAll('select[name="status"]').forEach(dropdown => {
+            dropdown.addEventListener('change', (event) => {
+                if (event.target.value === '0') {
+                    if (confirm('Are you sure? You will no longer see this job.')) {
+                        // If confirmed, submit the form
+                        event.target.closest('form').submit();
+                    } else {
+                        // Optionally, reset the dropdown or perform other actions
+                        event.target.value = ''; // Reset the dropdown value
+                        // Or prevent form submission
+                        // event.preventDefault();
+                    }
+                } else {
+                    event.target.closest('form').submit();
+                };
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load tango_time_tags %}
+<tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
+    <td x-data="{ selectedValue: '' }">
+        <form action="{% url 'update_job_status' %}" method="post" x-ref="job_status" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input
+            id="id"
+            type="hidden"
+            name="id"
+            value=" {{ job.id }}" />
+        <input type="submit" value="Update status" x-data="{ isVisible: false }"  x-show="isVisible" />
+        </form>
+    </td>
+    <td>
+        <a href="{{ job.link }}">{{ job.title }}</a>
+    </td>
+    
+    <td>{{ job.location }}</td>
+    <td>About {{ job.pub_date|short_timesince|default_if_none:"" }} ago</td>
+</tr>
