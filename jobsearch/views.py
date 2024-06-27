@@ -21,7 +21,7 @@ class JobListView(ListView):
     context_object_name = "jobs"
 
     def get_queryset(self):
-        return Job.objects.filter(user=self.request.user, rejected=False).order_by('company')
+        return Job.objects.filter(rejected=False).order_by('company')
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
