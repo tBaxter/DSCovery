@@ -9,7 +9,7 @@
     {{ site.name }} 
     {% block extra_title %}{% endblock %}
   </title>
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=4">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
   {% block site_styles %}{% endblock %}
   <meta name="description" content="{% block description %}{% endblock %}">
 
@@ -45,7 +45,7 @@
               {% block logo %}{{ site.name }}{% endblock %}
             </a>
           </h1>
-          <h2>Compiling and aggregating civic tech jobs from across the <a href="http://digitalservicescoalition.org">Digital Services Coaltion</a> firms</h2>
+          <h2>Compiling and aggregating civic tech jobs from <a href="http://digitalservicescoalition.org">Digital Services Coalition</a> and other modern civic tech firms.</h2>
           {% block nav_tagline %}{% endblock %}
         {% endblock %}
     {% endblock %}
