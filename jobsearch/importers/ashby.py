@@ -41,7 +41,7 @@ def get_jobs():
                     jobs.append({
                         'company': co_name,
                         'title': card['title'],
-                        'link': url + "/" + card['jobId'],
+                        'link': url + "/" + card['id'], # not jobId
                         'location': card['locationName'],
                         'job_id': card['jobId'],
                         'pub_date': card['publishedDate']
