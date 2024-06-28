@@ -51,6 +51,15 @@
     {% endblock %}
     {% block banner_nav %}{% endblock %}
   </header>
+  <nav role="navigation">
+  {% load flatpages %}
+    {% get_flatpages as flatpages %}
+    <ul>
+        {% for page in flatpages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+  </nav>
   <div id="wrapper">
     {% block messages %}
         {% if messages %}

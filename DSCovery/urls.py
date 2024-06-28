@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from jobsearch.views import JobListView, JobDetailView, fetch_job_details, import_jobs, reject_job, update_job_status
 
@@ -31,6 +31,8 @@ urlpatterns = [
     
     path('reject-job/', reject_job, name="reject_job"),
     path('update-job-status/', update_job_status, name="update_job_status"),
+
+    path("pages/", include("django.contrib.flatpages.urls")),
 
 
 ]

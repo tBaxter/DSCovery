@@ -48,17 +48,19 @@ body {
   font-family: var(--font-family);
 }
 
-a {color: var(--color-primary); }
+a {
+  color: var(--color-primary); 
+  transition: color 0.33s;
+}
 a:hover {color: var(--color-primary-dark); }
 
 
 [role=banner] {
   display: flex;
   align-items: center;
-  margin: 1.5em auto 1em;
+  margin: 1.5em auto 0;
   justify-content: flex-start;
   width: var(--max_width);
-  border-bottom: 1px solid #ddd;
   padding-bottom: 0.5em
 }
 
@@ -71,6 +73,25 @@ a:hover {color: var(--color-primary-dark); }
 }
 [role="banner"] h2 {
   margin-top: 0.25em;
+  font-size: 0.875em;
+}
+
+[role="navigation"] {
+  background-color: var(--color-primary); 
+  margin-bottom: 1em;
+  
+}
+[role="navigation"] ul {
+  max-width: var(--max_width);
+  margin: 0 auto;
+}
+[role="navigation"] li {
+  display: inline-block;
+  padding: 0.5em 1em 0.5em 0;
+}
+[role="navigation"] li a {
+  color: var(--color-background);
+  text-decoration: none;
   font-size: 0.875em;
 }
 
