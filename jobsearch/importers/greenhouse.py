@@ -36,7 +36,7 @@ def get_jobs():
         for card in job_cards:
             job_title = card.find("a").text.strip()
             title = f"{section_title}: {job_title}"
-            link = card.find('a')['href']
+            link = root_url + card.find('a')['href']
             jobs.append({
                 'company': co_name,
                 'job_id': link.rsplit('/')[-1],
