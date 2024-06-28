@@ -1,6 +1,7 @@
 {% load tango_time_tags %}
 <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
     <td x-data="{ selectedValue: '' }">
+        {% if user.is_authenticated %}
         <form action="{% url 'update_job_status' %}" method="post" x-ref="job_status" >
         {% csrf_token %}
         {{ form.as_p }}
@@ -11,6 +12,7 @@
             value=" {{ job.id }}" />
         <input type="submit" value="Update status" x-data="{ isVisible: false }"  x-show="isVisible" />
         </form>
+        {% endif %}
     </td>
     <td>
         <a href="{{ job.link }}">{{ job.title }}</a>

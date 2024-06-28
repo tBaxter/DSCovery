@@ -20,12 +20,15 @@ def get_jobs():
     soup = BeautifulSoup(r.content, "html.parser")
 
     jobs = []
-    for card in soup.find_all('div', class_="job-search-card"):        
+    for card in soup.find_all('div', class_="job-search-card"):  
+        # we have to clean up Linkedins' nasty tracking
+        link = card.find('a', class_="base-card__full-link")['href'].split("?")[0]
+      
         jobs.append({
             'company': card.find('h4', class_='base-search-card__subtitle').text.strip(),
             'title': card.find('h3', class_='base-search-card__title').text.strip(),
             'job_id': card['data-entity-urn'].rsplit(':')[-1],
-            'link': card.find('a', class_="base-card__full-link")['href'],
+            'link': link,
             'location': card.find('span', class_='job-search-card__location').text.strip(),
             'pub_date': card.find('time')['datetime']
         })

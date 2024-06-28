@@ -32,13 +32,13 @@ def get_jobs():
             print("Failed to get good response for ", co_name, r.status_code)
             pass 
         soup = BeautifulSoup(r.content, "html.parser")
-        job_cards = soup.find('div', class_='postings-wrapper').find_all('div', class_="posting")
-        jobs = []
+        job_wrapper = soup.find('div', class_='postings-wrapper')
+        job_cards = job_wrapper.find_all('div', class_="posting")
         for card in job_cards:
             title = card.find('a', class_='posting-title')
             jobs.append({
                 'company': co_name,
-                'title': title.find('h5').text.strip(),
+                'title': card.find('h5').text.strip(),
                 'link':  title['href'],
                 'location': card.find('span', class_="workplaceTypes").text.strip(),
                 'job_id': title['href'].rsplit('/')[-1],

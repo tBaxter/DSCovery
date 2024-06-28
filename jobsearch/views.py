@@ -69,21 +69,23 @@ def import_jobs(request):
     
     for job in jobs:
         try:
-            existing_job = Job.objects.get(job_id=job['job_id'], company=job['company'])
-        except Exception:
-            print("importing ", job['title'])
-            job = Job (
-                title = job['title'],
-                link = job['link'],
-                company = job['company'],
-                location = job['location'],
-                pub_date = job['pub_date'],
-                job_id = job['job_id'],
-                user=user
-            ) 
-            job.save()
-            #imported += 1
-        #("Imported:", imported)
+            Job.objects.get(job_id=job['job_id'], company=job['company'])
+        except:
+            try:
+                print("importing ", job['company'], job['title'])
+                newjob = Job (
+                    title = job['title'],
+                    link = job['link'],
+                    company = job['company'],
+                    location = job['location'],
+                    pub_date = job['pub_date'],
+                    job_id = job['job_id'],
+                    user=user
+                )
+                newjob.save()
+            except Exception as e:
+                print("failed to import", job, e)
+                print("job:", job['title'], job['link'], job['company'], job['company'], job['location'],  job['pub_date'], job['job_id'])
     return HttpResponseRedirect(reverse('jobs'))
 
 

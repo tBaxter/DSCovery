@@ -13,24 +13,54 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+from environs import Env
+
+env = Env()
+env.read_env()  # read .env file, if it exists
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SITE_ID = 1
+
+AUTH_USER_MODEL = "profiles.Profile"
+
+#APP_NAME = os.environ.get("FLY_APP_NAME")
+ALLOWED_HOSTS = ['dscovery.fly.dev', '127.0.0.1'] 
+CSRF_TRUSTED_ORIGINS = ['https://dscovery.fly.dev'] 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-j-dmmirobth#e!1_&6@83_^m4533qtla2+v@nuw4u&*#_2$4p&'
 SECRET_KEY = os.environ.get("SECRET_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    #SECURE_SSL_REDIRECT= True
 
-SITE_ID = 1
-
-#APP_NAME = os.environ.get("FLY_APP_NAME")
-ALLOWED_HOSTS = ['dscovery.fly.dev'] 
-CSRF_TRUSTED_ORIGINS = ['https://dscovery.fly.dev'] 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
 
 IMPORTER_HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
@@ -43,7 +73,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'profiles',
     'jobsearch',
+
 ]
 
 MIDDLEWARE = [
@@ -78,17 +110,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'DSCovery.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+#    "default": dj_database_url.config(
+#        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+#    )
+#}
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,13 +150,14 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# see warning re STATIC_ROOT at https://docs.djangoproject.com/en/5.0/ref/settings/#static-root
+STATIC_ROOT = BASE_DIR / "staticfiles" 
 
 STATICFILES_DIRS = [
     BASE_DIR / "static", # your static/ files folder

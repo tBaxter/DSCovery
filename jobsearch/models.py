@@ -39,22 +39,22 @@ class JobSearch(models.Model):
         return "%s, %s" % self.city, self.state
 
 class Job(models.Model):
-    title = models.CharField(max_length=200)
-    company = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
     link = models.URLField()
     pub_date = models.DateTimeField("date published", blank=True, null=True)
-    salary = models.CharField(max_length=200, blank=True, null=True)
+    salary = models.CharField(max_length=255, blank=True, null=True)
     import_date = models.DateTimeField(auto_now_add=True)
-    job_id = models.CharField(max_length=200, editable=False)
+    job_id = models.CharField(max_length=255, editable=False)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     rejected = models.BooleanField(default=False)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, blank=True, null=True)
 
     # Details
     company_size = models.CharField(max_length=20, blank=True, null=True)
-    skills = models.CharField(max_length=200, blank=True, null=True)
-    co_link = models.CharField(max_length=200, blank=True, null=True)
+    skills = models.CharField(max_length=255, blank=True, null=True)
+    co_link = models.CharField(max_length=255, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -70,7 +70,7 @@ class Job(models.Model):
 
 
 class JobTitle(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
 
 
 class BlockedCompany(models.Model):

@@ -20,7 +20,6 @@ def get_jobs():
         co_name, key = firm
         print("Importing", co_name)
         url = root_url + '/recruiting/jobs/All/' + key
-        print(url)
 
         r = requests.get(url, headers=settings.IMPORTER_HEADERS)
         if r.status_code != 200:
