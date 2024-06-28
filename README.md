@@ -2,7 +2,8 @@
 
 DSCovery is a tool to find civic tech jobs with [Digital Services Coalition](http://digitalservicescoalition.org) firms. This is very much a work in progress, and I make no promises of stability.
 
-To run it, you'll need to pull the repo and run it as a Django app. At least until I deploy it. That should be soon. 
+You can see it live at https://dscovery.fly.dev
+
 
 It currently collects and aggregates jobs from the following companies:
 
