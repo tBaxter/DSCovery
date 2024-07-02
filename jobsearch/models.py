@@ -38,13 +38,26 @@ class JobSearch(models.Model):
     def location(self):
         return "%s, %s" % self.city, self.state
 
+
+class Company(models.Model):
+    importer_name = models.CharField(max_length=255) # must match importer
+    display_name = models.CharField(max_length=255, blank=True, null=True)
+    company_size = models.CharField(max_length=20, blank=True, null=True)
+    co_link = models.CharField(max_length=255, blank=True, null=True)
+    affiliations = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.display_name or self.importer_name
+
+
 class Job(models.Model):
     title = models.CharField(max_length=255)
+    new_company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     company = models.CharField(max_length=255)
+
     location = models.CharField(max_length=255)
     link = models.URLField()
     pub_date = models.DateTimeField("date published", blank=True, null=True)
-    salary = models.CharField(max_length=255, blank=True, null=True)
     import_date = models.DateTimeField(auto_now_add=True)
     job_id = models.CharField(max_length=255, editable=False)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -52,10 +65,9 @@ class Job(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, blank=True, null=True)
 
     # Details
-    company_size = models.CharField(max_length=20, blank=True, null=True)
     skills = models.CharField(max_length=255, blank=True, null=True)
-    co_link = models.CharField(max_length=255, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
+    salary = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -64,8 +76,7 @@ class Job(models.Model):
         return reverse("job_detail", kwargs={"pk": self.pk})
 
     def get_source_url(self):
-        # Linkedin
-        return "https://linkedin.com/jobs/view/{}/".format(self.job_id)
+        return self.link
             
 
 

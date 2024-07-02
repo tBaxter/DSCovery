@@ -13,7 +13,7 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
 from .forms import JobStatusForm
-from .models import Job
+from .models import Job, Company
 
 
 class JobListView(ListView):
@@ -52,8 +52,6 @@ def import_jobs(request):
     Search for jobs matching our parameters.
     """
     user = request.user
-    #searches = JobSearch.objects.filter(user=request.user)
-    #importers = settings.IMPORTERS
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
     jobs = []
     for file_name in os.listdir(importers_dir):
@@ -73,10 +71,12 @@ def import_jobs(request):
         except:
             try:
                 print("importing ", job['company'], job['title'])
+                company, created = Company.objects.get_or_create(importer_name=job['company'])
                 newjob = Job (
                     title = job['title'],
                     link = job['link'],
                     company = job['company'],
+                    new_company = company,
                     location = job['location'],
                     pub_date = job['pub_date'],
                     job_id = job['job_id'],
@@ -92,7 +92,7 @@ def import_jobs(request):
 @login_required
 def fetch_job_details(request):
     job = get_object_or_404(Job, pk=request.GET['pk'])
-    r = requests.get(job.get_source_url(), headers=headers)
+    r = requests.get(job.link, headers=settings.IMPORTER_HEADERS)
     if r.status_code != 200:
         return HttpResponse("Failed to get good requests response: ", r.status_code)
     soup = BeautifulSoup(r.content, "html.parser")

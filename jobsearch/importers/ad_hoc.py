@@ -1,4 +1,3 @@
-import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,19 +12,20 @@ url = 'https://www.linkedin.com/jobs/search/?f_C=10350118&keywords=ad%20hoc%20ll
 
 def get_jobs():
     print("Importing Ad Hoc from Linkedin")
+    
     r = requests.get(url, headers=settings.IMPORTER_HEADERS)
     if r.status_code != 200:
         print("Failed to get good requests response: ", r.status_code)
         return 
+    
     soup = BeautifulSoup(r.content, "html.parser")
-
     jobs = []
     for card in soup.find_all('div', class_="job-search-card"):  
         # we have to clean up Linkedins' nasty tracking
         link = card.find('a', class_="base-card__full-link")['href'].split("?")[0]
       
         jobs.append({
-            'company': card.find('h4', class_='base-search-card__subtitle').text.strip(),
+            'company': 'Ad Hoc',
             'title': card.find('h3', class_='base-search-card__title').text.strip(),
             'job_id': card['data-entity-urn'].rsplit(':')[-1],
             'link': link,
