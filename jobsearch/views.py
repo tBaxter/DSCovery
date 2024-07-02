@@ -21,13 +21,13 @@ class JobListView(ListView):
     context_object_name = "jobs"
 
     def get_queryset(self):
-        return Job.objects.filter(rejected=False).order_by('company')
+        return Job.objects.filter(rejected=False).order_by('new_company')
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
         context['jobs_list'] = {}
         for item in context['jobs']:
-            company = item.company
+            company = item.new_company
             form = JobStatusForm(instance=item)
             # Check if the category key exists in grouped_dict
             if company in context['jobs_list']:
@@ -66,16 +66,17 @@ def import_jobs(request):
             jobs.extend(co_jobs) if co_jobs is not None else jobs
     
     for job in jobs:
+        company, created = Company.objects.get_or_create(importer_name=job['company'])
         try:
-            Job.objects.get(job_id=job['job_id'], company=job['company'])
+            Job.objects.get(job_id=job['job_id'], new_company=company)
         except:
             try:
                 print("importing ", job['company'], job['title'])
-                company, created = Company.objects.get_or_create(importer_name=job['company'])
+                
                 newjob = Job (
                     title = job['title'],
                     link = job['link'],
-                    company = job['company'],
+                    #company = job['company'],
                     new_company = company,
                     location = job['location'],
                     pub_date = job['pub_date'],

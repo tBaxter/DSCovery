@@ -15,7 +15,6 @@ firms = [
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
     ('Skylight', 'skylighthq')
-
 ]
 
 def get_jobs():

@@ -7,10 +7,12 @@ dj-database-url==2.2.0
 dj-email-url==1.0.6
 Django==5.0.6
 django-cache-url==3.4.5
+django-environ==0.11.2
 django-localflavor==4.0
 environs==11.0.0
 gunicorn==22.0.0
 idna==3.7
+Markdown==3.6
 marshmallow==3.21.3
 packaging==24.1
 psycopg2-binary==2.9.9

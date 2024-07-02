@@ -18,8 +18,8 @@ STATUS_CHOICES = {
     "3": "Initial Contact",
     "4": "Completed Phone Screen",
     "0": "Not interested"
-
 }
+
 
 Profile = get_user_model()
 
@@ -40,20 +40,25 @@ class JobSearch(models.Model):
 
 
 class Company(models.Model):
-    importer_name = models.CharField(max_length=255) # must match importer
-    display_name = models.CharField(max_length=255, blank=True, null=True)
+    importer_name = models.CharField("Name", max_length=255, help_text="Must match the key from the importer")
+    #display_name = models.CharField(max_length=255, blank=True, null=True)
     company_size = models.CharField(max_length=20, blank=True, null=True)
     co_link = models.CharField(max_length=255, blank=True, null=True)
     affiliations = models.CharField(max_length=255, blank=True, null=True)
+    importer_type = models.CharField(max_length=255, blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.display_name or self.importer_name
+        return self.importer_name
+    
+    class Meta:
+        ordering = ["importer_name"]
 
 
 class Job(models.Model):
     title = models.CharField(max_length=255)
     new_company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-    company = models.CharField(max_length=255)
+    #company = models.CharField(max_length=255)
 
     location = models.CharField(max_length=255)
     link = models.URLField()
