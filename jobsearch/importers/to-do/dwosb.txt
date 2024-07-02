@@ -1,33 +1,67 @@
-A1M - No openings
+https://www.digitalwosballiance.org
 
-agile5 - https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=18bcd225-9065-4e78-8585-763a250b6ab5&ccId=19000101_000001&type=JS&lang=en_US
 
-Agility Consulting - No jobs page?
+No current openings posted
+A1M
+c3 tech
+haystream 
+honovee
+Pixel
+Potomac Haven: https://www.potomachaven.com/jobs/ does not load. Assuming no jobs.
+sharpedg
+
+No Jobs page at all
+Agility Consulting
+Antean Technology
+data surge
+designovation
+k2scquared -- not live
+L2NL
+snowbird
+Type A creative
+
+Broken link to jobs:
+inomal healthcare concepts (https://inomalhealthcare.com/careers/)
+Lithe: (https://lithesolutions.com/) Jobs page 404s, contact page is lorem ipsum
+
+
 
 Alesig consulting - https://secure6.saashr.com/ta/6194071.careers?CareersSearch&InFrameset=1&HostedBy=www.alesig.com
 
 Amivero - paylocity https://recruiting.paylocity.com/recruiting/jobs/All/c3999ef9-e4cd-4e2f-a5b8-b0bd0facd60a/Amivero/contact-us/
 
-Antean Technology - No jobs page?
-
 https://www.arcaspicio.com/careers/available-positions -- jobvite
 
 arch systems https://archsystemsinc.com/career/ zip recruiter?
 
-c3 tech - no jobs?
-
 communicate health https://communicatehealth.com/careers/
 
-data surge - no jobs page?
+JR software -- isolvedhire https://jrssinc.isolvedhire.com/jobs/
 
-designovation - no jobs page
+Link: https://www.useinktothink.com/careers (uses wix?)
 
-haystream - no posted roles
+PBG consulting - uses framed GH https://pbgconsult.com/about/careers/jobs/
 
-honovee - no posted roles
+Rigel one - https://rigelonetech.com/careers/ uses some WP thing
 
-humango solutions https://www.humangosolutions.com/join-our-team 
-https://www.powr.io/job-board/u/2194a2f4_1705612926#platform=html
+RiverNorth - nice page. May be difficult to parse https://www.therivernorth.com/current-openings
+
+SEA healthcare https://swainengassociates.com/careers looks impossible to parse
+
+
+skybrid - uses zoho. Looks easy enough to parse https://skybrid.zohorecruit.com/jobs/Careers
+
+softdev - applicantstack. looks easy to parse https://www.softdevinc.com/careers/open-jobs/
+
+Sure Secure -- uses some awsm plugin. Looks doable https://www.suresecuresolutions.com/careers/
+
+
+
+
+
+
+
+
 
 
 

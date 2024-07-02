@@ -12,6 +12,7 @@ firms = [
     ('Coforma', 'coforma'),
     ('Corbalt', 'corbalt'),
     ('Exygy', 'exygy'),
+    ('Mastrics', 'mastrics'),
     ('MO Studio', 'MOstudio'),
     ('Nava', 'nava'),
     ('Skyward', 'skywarditsolutions'),

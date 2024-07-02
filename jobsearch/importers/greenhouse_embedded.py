@@ -11,6 +11,7 @@ firms = [
     ('Capital Technology Group', 'capitaltg'),
     ('Fearless', 'fearless'),
     ('MetroStar', 'metrostarsystems'),
+    ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
     ('Skylight', 'skylighthq')
