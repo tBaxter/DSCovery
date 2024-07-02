@@ -9,6 +9,7 @@ root_url = 'https://jobs.jobvite.com'
 # Name, GH key
 firms = [
     ('Clarity Innovations', 'clarityinnovations'),
+    ('ArcAspicio', 'arc-aspicio')
 ]
 
 def get_jobs():
