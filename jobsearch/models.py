@@ -12,6 +12,13 @@ RECENCY_CHOICES = {
     "": "Any time",
 }
 
+COMPANY_SIZE_CHOICES = {
+    "1-50": "1-50 employees",
+    "51-200": "51-200 employees",
+    "201-500": "201-500 employees",
+    "501-1000": "501-1,000 employees",
+}
+
 STATUS_CHOICES = {
     "1": "Considering",
     "2": "Applied",
@@ -20,17 +27,14 @@ STATUS_CHOICES = {
     "0": "Not interested"
 }
 
-
 Profile = get_user_model()
+
 
 class JobSearch(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     keywords = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     state = USStateField(max_length=20)
-#    workplace_type = models.CharField(max_length=1, choices=WORKPLACE_TYPE_CHOICES)
-#    level = models.CharField(max_length=1, choices=LEVEL_CHOICES, blank=True, null=True)
-#    recency = models.CharField(max_length=10, choices=RECENCY_CHOICES, blank=True, null=True)
         
     def __str__(self):
         return self.keywords
@@ -39,20 +43,39 @@ class JobSearch(models.Model):
         return "%s, %s" % self.city, self.state
 
 
+class Agency(models.Model):
+    name = models.CharField(max_length=200)
+    full_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=200)
+    full_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class Company(models.Model):
     importer_name = models.CharField("Name", max_length=255, help_text="Must match the key from the importer")
-    #display_name = models.CharField(max_length=255, blank=True, null=True)
-    company_size = models.CharField(max_length=20, blank=True, null=True)
+    company_size = models.CharField(choices=COMPANY_SIZE_CHOICES, max_length=20, blank=True, null=True)
     co_link = models.CharField(max_length=255, blank=True, null=True)
-    affiliations = models.CharField(max_length=255, blank=True, null=True)
+    affiliations = models.ManyToManyField(Group, blank=True)
     importer_type = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=True)
+    about = models.TextField(blank=True, null=True)
+    agencies = models.ManyToManyField(Agency, blank=True)
 
     def __str__(self):
         return self.importer_name
     
     class Meta:
         ordering = ["importer_name"]
+        verbose_name_plural = "companies"
 
 
 class Job(models.Model):

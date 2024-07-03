@@ -8,7 +8,7 @@ root_url = 'https://recruiting.paylocity.com'
 
 # Name, key
 firms = [
-    ('Amnivero', 'c3999ef9-e4cd-4e2f-a5b8-b0bd0facd60a/Amivero'),
+    ('Amivero', 'c3999ef9-e4cd-4e2f-a5b8-b0bd0facd60a/Amivero'),
     ('eSimplicity', 'a2d790ab-c239-40b9-a6ea-9e5853bbd737/eSimplicity'),
     ('So Company', '1974d707-52df-497d-9c10-b664aec386a3/Storij-Inc-Current-Openings'),
     ('Vaultes', '512b109e-bb46-4419-98e4-84028b520a50/Vaultes-LLC/'),
