@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for company, company_job_list in jobs_list.items %}
+    {% for company in companies %}
     <table class="job-list">
-        <caption>{{ company }}</caption>
+        <caption><a href="{{ company.get_absolute_url }}">{{ company }}</a></caption>
         <thead>
             <tr>
             <th colspan="2">Job</th>

@@ -6,16 +6,18 @@ from jobsearch.models import Group, Company, Job, Agency
 class AgencyAdmin(admin.ModelAdmin):
     pass
 
+
 class GroupAdmin(admin.ModelAdmin):
     pass
 
+
 class CompanyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["importer_name", "importer_type"]
+
 
 class JobAdmin(admin.ModelAdmin):
     list_display = ["title", "new_company", "location", "pub_date"]
     list_filter = ["new_company"]
-
 
 
 admin.site.register(Agency, AgencyAdmin)

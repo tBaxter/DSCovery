@@ -122,7 +122,8 @@ h1, h3 {
 
 .job-list {
     border-collapse: collapse;
-    width: var(--max_width);
+    /*width: var(--max_width);*/
+    width: 100%;
     margin: 0 auto 1em;
 
     caption {

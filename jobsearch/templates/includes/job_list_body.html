@@ -1,5 +1,5 @@
 <tbody id="jobs-list-body" x-init>
-    {% for job, form in company_job_list %}
+    {% for job in company.job_set.all %}
         {% include 'includes/job_detail_row.html' %}
     {% endfor %}
 </tbody>

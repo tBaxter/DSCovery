@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 #from profiles.models import LEVEL_CHOICES, WORKPLACE_TYPE_CHOICES
@@ -62,6 +63,7 @@ class Group(models.Model):
 
 class Company(models.Model):
     importer_name = models.CharField("Name", max_length=255, help_text="Must match the key from the importer")
+    slug= models.SlugField(max_length=255, blank=True)
     company_size = models.CharField(choices=COMPANY_SIZE_CHOICES, max_length=20, blank=True, null=True)
     co_link = models.CharField(max_length=255, blank=True, null=True)
     affiliations = models.ManyToManyField(Group, blank=True)
@@ -70,13 +72,20 @@ class Company(models.Model):
     about = models.TextField(blank=True, null=True)
     agencies = models.ManyToManyField(Agency, blank=True)
 
-    def __str__(self):
-        return self.importer_name
-    
     class Meta:
         ordering = ["importer_name"]
         verbose_name_plural = "companies"
+        
+    def __str__(self):
+        return self.importer_name
+    
+    def save(self, *args, **kwargs):
+        self.slug= slugify(self.importer_name)
+        super(Company, self).save(*args, **kwargs)    
 
+    def get_absolute_url(self):
+        return reverse("company_detail", kwargs={"slug": self.slug})
+    
 
 class Job(models.Model):
     title = models.CharField(max_length=255)

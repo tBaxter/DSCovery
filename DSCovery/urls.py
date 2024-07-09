@@ -17,13 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from jobsearch.views import JobListView, JobDetailView, fetch_job_details, import_jobs, reject_job, update_job_status
+from jobsearch.views import JobListView, JobDetailView, CompanyDetailView, fetch_job_details, import_jobs, reject_job, update_job_status
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', JobListView.as_view(), name='jobs'),
     path('jobs/<int:pk>/', JobDetailView.as_view(), name='job_detail'),
+    path('jobs/<slug:slug>/', CompanyDetailView.as_view(), name='company_detail'),
+
 
     path('fetch-details/', fetch_job_details, name="fetch_job"),
 

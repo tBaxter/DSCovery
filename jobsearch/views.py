@@ -17,14 +17,18 @@ from .models import Job, Company
 
 
 class JobListView(ListView):
-    model = Job
-    context_object_name = "jobs"
+    model = Company
+    context_object_name = "companies"
+    template_name = "jobsearch/job_list.html"
 
-    def get_queryset(self):
-        return Job.objects.filter(rejected=False).order_by('new_company')
+    """def get_queryset(self):
+        #return Job.objects.filter(rejected=False).order_by('new_company')
+        return Company.objects.all()
+    """
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
+        """
         context['jobs_list'] = {}
         for item in context['jobs']:
             company = item.new_company
@@ -34,8 +38,12 @@ class JobListView(ListView):
                 context['jobs_list'][company].append((item, form))
             else:
                 context['jobs_list'][company] = [(item, form)]
-            
+        """
         return context
+
+class CompanyDetailView(DetailView):
+    model = Company
+
 
 class JobDetailView(DetailView):
     model = Job

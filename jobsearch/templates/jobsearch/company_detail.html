@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block bodyclass %}details{% endblock %}
+
+{% block content %}
+
+
+<h1><a href="{{ company.co_link }}">{{ company }}</a></h1>
+<dl>
+  <dt>About:</dt>
+  <dd>{{ company.about }}</dd>
+  <dt>Company size:</dt>
+  <dd>{{ company.company_size|default_if_none:"Unknown"  }}</dd>  
+  <dt>Affiliations:</dt>
+  <dd>{{ company.affiliations.all|join:", " }}</dd>
+  <dt>Works with:</dt>
+  <dd>{{ company.agencies.all|join:", " }}</dd>
+</dl>
+<table class="job-list">
+  <caption>Current openings</caption>
+<tbody id="jobs-list-body" x-init>
+  {% for job in company.job_set.all %}
+      {% include 'includes/job_detail_row.html' %}
+  {% endfor %}
+</tbody>
+</table>
+
+
+
+
+{% endblock %}
+
+
