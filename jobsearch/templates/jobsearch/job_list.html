@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
+{% load tango_time_tags %}
 
 {% block content %}
+
+<h1>What's new</h1>
+<table class="job-list">
+    <thead>
+        <tr>
+        <th colspan="2">Job</th>
+        <th>Location</th>
+        <th>Found</th>
+        </tr>
+    </thead>
+        {% for job in fresh_list|slice:20 %}
+        <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
+            <td>
+                {{ job.new_company }}
+            </td>
+            <td>
+                <a href="{{ job.link }}">{{ job.title }}</a>
+            </td>
+            
+            <td>{{ job.location }}</td>
+            <td>About {{ job.pub_date|short_timesince|default_if_none:"" }} ago</td>
+        </tr>
+        {% endfor %}
+</table>
+
+
+<h1>All the jobs</h1>
+
     {% for company in companies %}
     <table class="job-list">
         <caption><a href="{{ company.get_absolute_url }}">{{ company }}</a></caption>
