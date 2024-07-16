@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block extra_title %} Companies: {{ company }}{% endblock %}
 {% block bodyclass %}details{% endblock %}
 
 {% block content %}
@@ -13,7 +14,7 @@
   <dd>{{ company.company_size|default_if_none:"Unknown"  }}</dd>  
   <dt>Affiliations:</dt>
   <dd>{{ company.affiliations.all|join:", " }}</dd>
-  <dt>Works with:</dt>
+  <dt>Known for working with:</dt>
   <dd>{{ company.agencies.all|join:", " }}</dd>
 </dl>
 <table class="job-list">
@@ -24,9 +25,6 @@
   {% endfor %}
 </tbody>
 </table>
-
-
-
 
 {% endblock %}
 
