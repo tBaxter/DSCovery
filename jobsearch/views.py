@@ -1,6 +1,7 @@
 import os
 import requests
 import importlib.util
+from datetime import datetime, timedelta
 
 from bs4 import BeautifulSoup
 
@@ -28,18 +29,10 @@ class JobListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
-        """
-        context['jobs_list'] = {}
-        for item in context['jobs']:
-            company = item.new_company
-            form = JobStatusForm(instance=item)
-            # Check if the category key exists in grouped_dict
-            if company in context['jobs_list']:
-                context['jobs_list'][company].append((item, form))
-            else:
-                context['jobs_list'][company] = [(item, form)]
-        """
+        one_week_ago = datetime.now() - timedelta(days=8)
+        context['fresh_list'] = Job.objects.filter(pub_date__gte=one_week_ago)
         return context
+
 
 class CompanyDetailView(DetailView):
     model = Company
