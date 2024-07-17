@@ -9,6 +9,7 @@ root_url = '.applytojob.com/apply/'
 firms = [
     ('Analytica', 'analyticallc'),
     ('Mobomo', 'mobomo'),
+    ('For People', 'forpeople')
 ]
 
 
