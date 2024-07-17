@@ -14,7 +14,7 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
 from .forms import JobStatusForm
-from .models import Job, Company
+from .models import Job, Company, PRACTICE_CHOICES
 
 
 class JobListView(ListView):
@@ -30,7 +30,14 @@ class JobListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
         one_week_ago = datetime.now() - timedelta(days=8)
-        context['fresh_list'] = Job.objects.filter(pub_date__gte=one_week_ago)
+        fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False)
+        # if we see job type, we need to pass it along to context,
+        # and also filter our fresh jobs by it.
+        if self.request.method == 'GET' and 'job_type' in self.request.GET:
+           job_type = self.request.GET['job_type']
+           context['job_type'] = (job_type, PRACTICE_CHOICES[job_type])
+           fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False, job_type=job_type)
+        context['fresh_list'] = fresh_jobs
         return context
 
 

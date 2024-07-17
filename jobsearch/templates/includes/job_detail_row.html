@@ -17,7 +17,10 @@
     <td>
         <a href="{{ job.link }}">{{ job.title }}</a>
     </td>
-    
+    <td>{% if job.job_type %}
+        <a href="{% url 'jobs' %}?job_type={{ job.job_type }}">{{ job.get_job_type_display }}</a>
+    {% endif %}
+    </td>
     <td>{{ job.location }}</td>
     <td>About {{ job.pub_date|short_timesince|default_if_none:"" }} ago</td>
 </tr>

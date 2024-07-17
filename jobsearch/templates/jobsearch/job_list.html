@@ -1,24 +1,32 @@
 {% extends 'base.html' %}
-{% load tango_time_tags %}
+{% load tango_time_tags jobsearch_tags %}
 
 {% block content %}
 
-<h1>What's new</h1>
-<table class="job-list">
+
+<h1>New {% if job_type %}{{ job_type.1 }}{% endif %} Jobs</h1>
+<table class="job-list fresh-list">
     <thead>
         <tr>
-        <th colspan="2">Job</th>
+        <th>Company</th>
+        <th>Job</th>
+        <th>Tagged</th>
         <th>Location</th>
         <th>Found</th>
         </tr>
     </thead>
-        {% for job in fresh_list|slice:20 %}
+        {% for job in fresh_list|dictsortreversed:"pub_date"|slice:20 %}
         <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
             <td>
                 {{ job.new_company }}
             </td>
             <td>
                 <a href="{{ job.link }}">{{ job.title }}</a>
+            </td>
+            <td>
+                {% if job.job_type %}
+                    <a href="{% url 'jobs' %}?job_type={{ job.job_type }}">{{ job.get_job_type_display }}</a>
+                {% endif %}
             </td>
             
             <td>{{ job.location }}</td>
@@ -28,19 +36,22 @@
 </table>
 
 
-<h1>All the jobs</h1>
-
+<h1>All {{ job_type.1 }} Jobs</h1>
+{% if job_type %}
+<p>Note: Jobs are manually tagged. Mistakes will happen. Feel free to <a href="https://github.com/tBaxter/DSCovery/issues">log an issue</a> if you see one.</p>
+{% endif %}
     {% for company in companies %}
     <table class="job-list">
         <caption><a href="{{ company.get_absolute_url }}">{{ company }}</a></caption>
         <thead>
             <tr>
             <th colspan="2">Job</th>
+            <th>Tagged</th>
             <th>Location</th>
             <th>Found</th>
             </tr>
         </thead>
-        {% include 'includes/job_list_body.html' %} 
+        {% show_jobs company job_type.0 %}
     </table>
     {% endfor %}
 {% endblock %}

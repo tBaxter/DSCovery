@@ -28,6 +28,18 @@ STATUS_CHOICES = {
     "0": "Not interested"
 }
 
+PRACTICE_CHOICES = {
+    "bd": "Business Development",
+    "content": "Content",
+    "data": "Data and Analytics",
+    "delivery": "Delivery",
+    "design": "Design and Research",
+    "engineering":  "Engineering and Development",
+    "product": "Product Management",
+    "security": "Security",
+    "other": "Other",
+}
+
 Profile = get_user_model()
 
 
@@ -100,6 +112,7 @@ class Job(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     rejected = models.BooleanField(default=False)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, blank=True, null=True)
+    job_type = models.CharField(max_length=20, choices=PRACTICE_CHOICES, blank=True, null=True)
 
     # Details
     skills = models.CharField(max_length=255, blank=True, null=True)

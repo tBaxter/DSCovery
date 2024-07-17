@@ -16,7 +16,8 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class JobAdmin(admin.ModelAdmin):
-    list_display = ["title", "new_company", "location", "pub_date"]
+    list_display = ["title", "new_company", "location", "pub_date", "job_type"]
+    list_editable = ['job_type']
     list_filter = ["new_company"]
 
 
