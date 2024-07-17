@@ -1,4 +1,5 @@
 import os
+import pytz
 import requests
 import importlib.util
 from datetime import datetime, timedelta
@@ -29,7 +30,7 @@ class JobListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
-        one_week_ago = datetime.now() - timedelta(days=8)
+        one_week_ago = datetime.now(pytz.utc) - timedelta(days=8)
         fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False)
         # if we see job type, we need to pass it along to context,
         # and also filter our fresh jobs by it.
@@ -57,10 +58,32 @@ class JobDetailView(DetailView):
 @login_required
 def import_jobs(request):
     """
-    Search for jobs matching our parameters.
+    First do any necessary clean-up, 
+    and then search for new jobs.
     """
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
+    one_month_ago = datetime.now(pytz.utc) - timedelta(days=30) # 30 is close enough for me.
+
+    for job in Job.objects.all():
+        # First, if the job is old, just delete it.
+        # TO-DO: we're working around some naive datetimes here 
+        # that should probably happen in the importer
+        pub_date = job.pub_date
+        if not pub_date.tzinfo:
+            pub_date = pytz.utc.localize(pub_date)
+        if pub_date <= one_month_ago:
+            print("Deleting", job)
+            job.delete()
+            continue
+        # now we'll ping the job and see if we get a 200. If not, delete it.
+        r = requests.get(job.link, headers=settings.IMPORTER_HEADERS)
+        if r.status_code != 200:
+            print("Failed to find job: ", job, r.status_code)
+            job.delete()
+            continue
+        # TO-DO: Build in detail getters here
+
     jobs = []
     for file_name in os.listdir(importers_dir):
         if file_name.endswith('.py') and file_name != '__init__.py':
@@ -126,6 +149,7 @@ def reject_job(request):
         return render(request, 'includes/job_detail_row.html')
 
     return HttpResponseRedirect(reverse('jobs'))
+
 
 @login_required
 def update_job_status(request):

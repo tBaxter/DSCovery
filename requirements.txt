@@ -18,6 +18,7 @@ packaging==24.1
 psycopg2-binary==2.9.9
 python-dotenv==1.0.1
 python-stdnum==1.20
+pytz==2024.1
 requests==2.32.3
 soupsieve==2.5
 sqlparse==0.5.0
