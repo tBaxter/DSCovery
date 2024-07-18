@@ -29,6 +29,7 @@ STATUS_CHOICES = {
 }
 
 PRACTICE_CHOICES = {
+    "office": "Back Office",
     "bd": "Business Development",
     "content": "Content",
     "data": "Data and Analytics",

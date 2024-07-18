@@ -18,7 +18,7 @@
         {% for job in fresh_list|dictsortreversed:"pub_date"|slice:20 %}
         <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
             <td>
-                {{ job.new_company }}
+                <a href="{% url 'company_detail' job.new_company.slug %}">{{ job.new_company }}</a>
             </td>
             <td>
                 <a href="{{ job.link }}">{{ job.title }}</a>

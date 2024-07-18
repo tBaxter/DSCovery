@@ -77,9 +77,15 @@ def import_jobs(request):
             job.delete()
             continue
         # now we'll ping the job and see if we get a 200. If not, delete it.
-        r = requests.get(job.link, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to find job: ", job, r.status_code)
+        
+        try:
+            r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=2)
+            if r.status_code != 200:
+                print("Failed to find job: ", job, r.status_code)
+                job.delete()
+                continue
+        except Exception as e:
+            print('Failed to ping job', job, e)
             job.delete()
             continue
         # TO-DO: Build in detail getters here
