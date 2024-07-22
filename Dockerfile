@@ -16,4 +16,4 @@ COPY . /code
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "--timeout", "600", "DSCovery.wsgi"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "--timeout", "900", "DSCovery.wsgi"]

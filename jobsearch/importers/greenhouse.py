@@ -29,21 +29,22 @@ def get_jobs():
             pass 
         
         soup = BeautifulSoup(r.content, "html.parser")
-        section = soup.find('section', class_="level-0")
-        section_title =  section.find('h3').text.strip()
-        job_cards = section.find_all('div', class_="opening")
+        sections = soup.find_all('section', class_="level-0")
+        for section in sections:
+            section_title =  section.find('h3').text.strip()
+            job_cards = section.find_all('div', class_="opening")
 
-        for card in job_cards:
-            job_title = card.find("a").text.strip()
-            title = f"{section_title}: {job_title}"
-            link = root_url + card.find('a')['href']
-            jobs.append({
-                'company': co_name,
-                'job_id': link.rsplit('/')[-1],
-                'title': title,
-                'link': link,
-                'location': card.find('span', class_="location").text.strip(),
-                'pub_date': datetime.date.today()
-            })    
+            for card in job_cards:
+                job_title = card.find("a").text.strip()
+                title = f"{section_title}: {job_title}"
+                link = root_url + card.find('a')['href']
+                jobs.append({
+                    'company': co_name,
+                    'job_id': link.rsplit('/')[-1],
+                    'title': title,
+                    'link': link,
+                    'location': card.find('span', class_="location").text.strip(),
+                    'pub_date': datetime.date.today()
+                })
     return jobs
  

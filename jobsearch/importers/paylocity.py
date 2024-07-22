@@ -1,8 +1,11 @@
-from django.conf import settings
 import json
+import pytz
 import re
 import requests
+
 from bs4 import BeautifulSoup
+from datetime import datetime, timedelta
+from django.conf import settings
 
 root_url = 'https://recruiting.paylocity.com'
 
@@ -39,13 +42,17 @@ def get_jobs():
                 job_cards = app_data.get('Jobs', [])
 
                 for card in job_cards:
-                    jobs.append({
-                        'company': co_name,
-                        'title': card['JobTitle'],
-                        'link': root_url + "/Recruiting/Jobs/Details/" + str(card['JobId']),
-                        'location': card['LocationName'],
-                        'job_id': card['JobId'],
-                        'pub_date': card['PublishedDate']
-                    })    
+                    pub_date_str = card['PublishedDate']
+                    pub_date = datetime.fromisoformat(pub_date_str)
+                    one_week_ago = datetime.now(pytz.utc) - timedelta(days=7)
+                    if pub_date >= one_week_ago:
+                        jobs.append({
+                            'company': co_name,
+                            'title': card['JobTitle'],
+                            'link': root_url + "/Recruiting/Jobs/Details/" + str(card['JobId']),
+                            'location': card['LocationName'],
+                            'job_id': card['JobId'],
+                            'pub_date': pub_date_str
+                        })
     return jobs
  

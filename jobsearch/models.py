@@ -36,6 +36,7 @@ PRACTICE_CHOICES = {
     "delivery": "Delivery",
     "design": "Design and Research",
     "engineering":  "Engineering and Development",
+    "marketing": "Marketing and Communications",
     "product": "Product Management",
     "security": "Security",
     "other": "Other",
