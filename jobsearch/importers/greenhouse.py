@@ -11,7 +11,7 @@ firms = [
     ('540', '540'),
     ('Agile Six', 'agilesix'),
     ('Bloom Works', 'bloomworks'),
-    ('Civic Actions', 'civicactions'),
+    ('CivicActions', 'civicactions'),
     ('Oddball', 'oddball'),
     ('Raft', 'raft'),
 ]
