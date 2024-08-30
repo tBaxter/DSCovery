@@ -35,7 +35,10 @@ def get_jobs():
             if not section_title:
                 section_title= card.find('h2') # but some people do this (fearless)
             job_title = card.find('div', class_="opening").find("a").text.strip()
-            title = f"{section_title.text.strip()}: {job_title}"
+            try:
+                title = f"{section_title.text.strip()}: {job_title}"
+            except Exception:
+                title = job_title
             link = card.find('a')['href']
             jobs.append({
                 'company': co_name,
