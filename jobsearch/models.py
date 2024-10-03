@@ -31,12 +31,12 @@ STATUS_CHOICES = {
 PRACTICE_CHOICES = {
     "office": "Back Office",
     "bd": "Business Development",
-    "content": "Content",
+    "content": "Content & Communications",
     "data": "Data and Analytics",
     "delivery": "Delivery",
     "design": "Design and Research",
-    "engineering":  "Engineering and Development",
-    "marketing": "Marketing and Communications",
+    "engineering":  "Engineering & Development",
+    'help': "Help and Support",
     "product": "Product Management",
     "security": "Security",
     "other": "Other",
@@ -77,7 +77,7 @@ class Group(models.Model):
 
 class Company(models.Model):
     importer_name = models.CharField("Name", max_length=255, help_text="Must match the key from the importer")
-    slug= models.SlugField(max_length=255, blank=True)
+    slug = models.SlugField(max_length=255, blank=True)
     company_size = models.CharField(choices=COMPANY_SIZE_CHOICES, max_length=20, blank=True, null=True)
     co_link = models.CharField(max_length=255, blank=True, null=True)
     affiliations = models.ManyToManyField(Group, blank=True)
@@ -113,6 +113,7 @@ class Job(models.Model):
     job_id = models.CharField(max_length=255, editable=False)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     rejected = models.BooleanField(default=False)
+    featured = models.BooleanField(default=False)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, blank=True, null=True)
     job_type = models.CharField(max_length=20, choices=PRACTICE_CHOICES, blank=True, null=True)
 

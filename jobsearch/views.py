@@ -30,17 +30,28 @@ class JobListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
-        one_week_ago = datetime.now(pytz.utc) - timedelta(days=8)
-        fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False)
+        fresh = datetime.now(pytz.utc) - timedelta(days=14)
+        # fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False)
         # if we see job type, we need to pass it along to context,
         # and also filter our fresh jobs by it.
+        featured = Job.objects.filter(featured=True, pub_date__gte=fresh, rejected=False)
         if self.request.method == 'GET' and 'job_type' in self.request.GET:
            job_type = self.request.GET['job_type']
            context['job_type'] = (job_type, PRACTICE_CHOICES[job_type])
-           fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False, job_type=job_type)
-        context['fresh_list'] = fresh_jobs
+           #fresh_jobs = Job.objects.filter(pub_date__gte=one_week_ago, rejected=False, job_type=job_type)
+           featured = featured.filter(
+               job_type=job_type)
+        context['highlighted'] = featured
         return context
 
+
+class FreshJobListView(ListView):
+    template_name = "jobsearch/fresh_job_list.html"
+
+    def get_queryset(self):
+        fresh = datetime.now(pytz.utc) - timedelta(days=10)
+        return Job.objects.filter(pub_date__gte=fresh, rejected=False)
+    
 
 class CompanyDetailView(DetailView):
     model = Company
@@ -63,7 +74,7 @@ def import_jobs(request):
     """
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
-    one_month_ago = datetime.now(pytz.utc) - timedelta(days=30) # 30 is close enough for me.
+    expire_date = datetime.now(pytz.utc) - timedelta(days=40) # 30 is close enough for me.
 
     for job in Job.objects.all():
         # First, if the job is old, just delete it.
@@ -72,22 +83,24 @@ def import_jobs(request):
         pub_date = job.pub_date
         if not pub_date.tzinfo:
             pub_date = pytz.utc.localize(pub_date)
-        if pub_date <= one_month_ago:
+        if pub_date <= expire_date:
             print("Deleting", job)
             job.delete()
             continue
-        # now we'll ping the job and see if we get a 200. If not, delete it.
         
-        try:
-            r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=2)
-            if r.status_code != 200:
-                print("Failed to find job: ", job, r.status_code)
+        # now we'll ping the job and see if we get a 200. If not, delete it.
+        # we don't bother doing this in debug because it's too intensitve.
+        if settings.DEBUG is False:
+            try:
+                r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=2)
+                if r.status_code != 200:
+                    print("Failed to find job: ", job, r.status_code)
+                    job.delete()
+                    continue
+            except Exception as e:
+                print('Failed to ping job', job, e)
                 job.delete()
                 continue
-        except Exception as e:
-            print('Failed to ping job', job, e)
-            job.delete()
-            continue
         # TO-DO: Build in detail getters here
 
     jobs = []

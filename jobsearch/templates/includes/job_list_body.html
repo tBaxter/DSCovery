@@ -1,5 +1,19 @@
+
+{% if jobs %}
+<table class="job-list">
+    <caption><a href="{{ company.get_absolute_url }}">{{ company }}</a></caption>
+    <thead>
+        <tr>
+        <th colspan="2">Job</th>
+        <th>Tagged</th>
+        <th>Location</th>
+        <th>Found</th>
+        </tr>
+    </thead>
 <tbody id="jobs-list-body" x-init data-job-type="{{ job_type }}">
     {% for job in jobs %}
         {% include 'includes/job_detail_row.html' %}
     {% endfor %}
 </tbody>
+</table>
+{% endif %}

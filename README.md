@@ -18,20 +18,21 @@ git clone https://github.com/tBaxter/DSCovery.git
 cd DSCovery
 ```
 
-2. Set up a virtual environment and install dependencies:
+2. Set up a virtual environment and install dependencies. We prefer to do this with pipenv:
 
-```
-python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-pip install -r requirements.txt
-```
-
-Alternately, you may prefer to use pipenv to manage your virtual environment. If so:
 ```
 pip install pipenv   # If you don't have it already
 pipenv install
 pipenv shell
 ```
+
+If you prefer a traditional virtualenv, that's fine, too.
+```
+python -m venv venv  # (note: if you are not sure you're using python 3.1+ by default, you may want to change this command to python3 - m venv venv to be sure)
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+pip install -r requirements.txt
+```
+
 You should now be in a virtual environment, with dependencies installed.
 
 3. Run Database Migrations:

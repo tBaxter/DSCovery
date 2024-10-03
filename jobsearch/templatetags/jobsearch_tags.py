@@ -7,9 +7,9 @@ register = template.Library()
 @register.inclusion_tag('includes/job_list_body.html', takes_context=True)
 def show_jobs(context, company, job_type):
     """
-    Creates job list for a given company, filtered as needed for job type
+    Creates job list for a given company, 
+    filtered as needed for job type
     and/or user preferences.
-
     """
     output_text = u''
 
@@ -19,5 +19,6 @@ def show_jobs(context, company, job_type):
 
     return {
         'jobs': jobs,
-        'job_type': job_type
+        'job_type': job_type,
+        'company': company
     }

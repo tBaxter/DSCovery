@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load tango_time_tags jobsearch_tags %}
+
+{% block content %}
+
+<h1>New {% if job_type %}{{ job_type.1 }}{% endif %} Jobs</h1>
+<table class="job-list fresh-list">
+    <thead>
+        <tr>
+        <th>Company</th>
+        <th>Job</th>
+        <th>Tagged</th>
+        <th>Location</th>
+        </tr>
+    </thead>
+        {% for job in object_list|dictsortreversed:"pub_date" %}
+        <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
+            <td>
+                <a href="{% url 'company_detail' job.new_company.slug %}">{{ job.new_company }}</a>
+            </td>
+            <td>
+                <a href="{{ job.link }}">{{ job.title }}</a>
+            </td>
+            <td>
+                {% if job.job_type %}
+                    <a href="{% url 'jobs' %}?job_type={{ job.job_type }}">{{ job.get_job_type_display }}</a>
+                {% endif %}
+            </td>
+            
+            <td>{{ job.location }}</td>
+        </tr>
+        {% endfor %}
+</table>
+{% endblock %}

@@ -29,24 +29,27 @@ def get_jobs():
             pass 
     
         soup = BeautifulSoup(r.content, "html.parser")
-        job_cards = soup.find_all('section', class_="level-0")
-        for card in job_cards:
-            section_title =  card.find('h3') # this is normal
+        sections = soup.find_all('section', class_="level-0")
+        for section in sections:
+            section_title =  section.find('h3').text.strip()
             if not section_title:
-                section_title= card.find('h2') # but some people do this (fearless)
-            job_title = card.find('div', class_="opening").find("a").text.strip()
-            try:
-                title = f"{section_title.text.strip()}: {job_title}"
-            except Exception:
-                title = job_title
-            link = card.find('a')['href']
-            jobs.append({
-                'company': co_name,
-                'job_id': link.rsplit('/')[-1],
-                'title': title,
-                'link': link,
-                'location': card.find('span', class_="location").text.strip(),
-                'pub_date': datetime.date.today()
-            })    
+                section_title = section.find('h2') # but some people do this (fearless)
+            # now get the cards for that section
+            job_cards = section.find_all('div', class_="opening")
+            for card in job_cards:
+                job_title = card.find('div', class_="opening").find("a").text.strip()
+                try:
+                    title = f"{section_title.text.strip()}: {job_title}"
+                except Exception:
+                    title = job_title
+                link = card.find('a')['href']
+                jobs.append({
+                    'company': co_name,
+                    'job_id': link.rsplit('/')[-1],
+                    'title': title,
+                    'link': link,
+                    'location': card.find('span', class_="location").text.strip(),
+                    'pub_date': datetime.date.today()
+                })    
     return jobs
  
