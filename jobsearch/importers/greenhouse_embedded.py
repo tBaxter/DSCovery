@@ -31,13 +31,15 @@ def get_jobs():
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")
         for section in sections:
-            section_title =  section.find('h3').text.strip()
-            if not section_title:
-                section_title = section.find('h2') # but some people do this (fearless)
+            try:
+                section_title =  section.find('h3').text.strip()
+            except:
+                # but some people put it in an H2, and if we can't find one at all, we still need a value.
+                section_title = section.find('h2').text if len(section.find('h2'))!=0 else '' 
             # now get the cards for that section
             job_cards = section.find_all('div', class_="opening")
             for card in job_cards:
-                job_title = card.find('div', class_="opening").find("a").text.strip()
+                job_title = card.find("a").text.strip()
                 try:
                     title = f"{section_title.text.strip()}: {job_title}"
                 except Exception:

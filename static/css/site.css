@@ -112,6 +112,9 @@ footer div {
   text-align:right;
   color: var(--color-background)
 }
+footer a {
+  color: var(--color-background);
+}
 /* Typography */
 p + * {margin-top: 1em}
 h1, h3 { 
