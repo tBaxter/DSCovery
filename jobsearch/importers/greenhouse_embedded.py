@@ -17,6 +17,16 @@ firms = [
     ('Skylight', 'skylighthq')
 ]
 
+def already_in_jobs(current_item, items):
+    """
+    Simple helper function to check if a similar-ish item is already in the list of jobs
+    based on the company and job name.
+    """
+    return any(
+        item["company"] == current_item["company"] and item["title"] == current_item["title"]
+        for item in items
+    )
+
 def get_jobs():
     jobs = []
     for firm in firms:    
@@ -45,13 +55,15 @@ def get_jobs():
                 except Exception:
                     title = job_title
                 link = card.find('a')['href']
-                jobs.append({
+                new_job = {
                     'company': co_name,
                     'job_id': link.rsplit('/')[-1],
                     'title': title,
                     'link': link,
                     'location': card.find('span', class_="location").text.strip(),
                     'pub_date': datetime.date.today()
-                })    
+                }
+                if not already_in_jobs(new_job, jobs):
+                    jobs.append(new_job)    
     return jobs
  

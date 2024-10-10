@@ -30,6 +30,8 @@
   <meta name="theme-color" content="#010101">
 
   <link rel="profile" href="http://microformats.org/profile/hcard">
+  <link rel="alternate" type="application/atom+xml" href="{% url 'job_feed' %}"> 
+  
   <script defer src="https://cdn.jsdelivr.net/npm/@imacrayon/alpine-ajax@0.6.0/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.11.1/dist/cdn.min.js"></script>
   {% block extrahead %}{% endblock %}
