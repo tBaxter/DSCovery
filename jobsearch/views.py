@@ -75,39 +75,43 @@ def import_jobs(request):
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
     # We'll only check them if they've been around a little while, to reduce load
-    check_date = datetime.now(pytz.utc) - timedelta(days=10) # 10 days seems good
-    expire_date = datetime.now(pytz.utc) - timedelta(days=40) # 40 is close enough for me.
-
-    for job in Job.objects.filter(pub_date__gte=check_date):
-        # First, if the job is past the expiration date, just delete it.
+    check_date = datetime.now(pytz.utc) - timedelta(days=15) # 15 days seems good
+    expire_date = datetime.now(pytz.utc) - timedelta(days=21) # 3 weeks
+    deleted = 0
+    print('Expire date', expire_date)
+    for job in Job.objects.filter(pub_date__lte=check_date):
         # TO-DO: we're fixing some naive datetimes here.
         # That should probably happen in the importers.
         pub_date = job.pub_date
         if not pub_date.tzinfo:
             pub_date = pytz.utc.localize(pub_date)
+        
+        # First, if the job is past the expiration date, just delete it.
         if pub_date <= expire_date:
-            print("Deleting", job)
+            print("Deleting old job", job)
             job.delete()
+            deleted += 1
             continue
         
-        # now we'll ping the job and see if we get a 200. If not, delete it.
-        # we don't bother doing this in debug because it's too intensitve.
+        # now, for the ones past check date (above) but not yet to expire
+        # we'll ping the job and see if we get a 200. If not, delete it.
+        # we don't bother doing this in debug because it's too intensive.
         if settings.DEBUG is False:
             try:
-                r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=2)
+                r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=1)
                 if r.status_code != 200:
-                    print("Failed to find job: ", job, r.status_code)
+                    print("Failed to find job, deleting: ", job, r.status_code)
                     job.delete()
                     continue
             except Exception as e:
-                print('Failed to ping job', job, e)
+                print('Failed to ping job, deleting', job, e)
                 job.delete()
                 continue
         # TO-DO: Build in detail getters here
 
     jobs = []
     for file_name in os.listdir(importers_dir):
-        if file_name.endswith('.py') and file_name != '__init__.py':
+        if file_name.endswith('.py') and file_name != '__init__.py' and file_name !='utils.py':
             module_name = file_name[:-3]  # Remove the .py extension
             module_path = os.path.join(importers_dir, file_name)
             # Load the module
@@ -117,18 +121,17 @@ def import_jobs(request):
             co_jobs = module.get_jobs()
             jobs.extend(co_jobs) if co_jobs is not None else jobs
     
+    existing_jobs = Job.objects.values_list("title", "new_company__importer_name")
+    print('existing_jobs', existing_jobs)
     for job in jobs:
         company, created = Company.objects.get_or_create(importer_name=job['company'])
-        try:
-            Job.objects.get(job_id=job['job_id'], new_company=company)
-        except:
+        if (job['title'], job['company']) not in existing_jobs:
             try:
-                print("importing ", job['company'], job['title'])
+                #print("importing ", job['company'], job['title'])
                 
                 newjob = Job (
                     title = job['title'],
                     link = job['link'],
-                    #company = job['company'],
                     new_company = company,
                     location = job['location'],
                     pub_date = job['pub_date'],

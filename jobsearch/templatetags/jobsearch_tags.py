@@ -13,9 +13,9 @@ def show_jobs(context, company, job_type):
     """
     output_text = u''
 
-    jobs = company.job_set.filter(rejected=False)
+    jobs = company.job_set.filter(rejected=False).order_by("job_type", "title")
     if job_type:
-        jobs = jobs.filter(rejected=False, job_type=job_type) 
+        jobs = jobs.filter(rejected=False, job_type=job_type).order_by("title")
 
     return {
         'jobs': jobs,

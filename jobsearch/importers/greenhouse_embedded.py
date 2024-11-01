@@ -3,6 +3,8 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
+from jobsearch.importers.utils import already_in_jobs
+
 root_url = 'https://boards.greenhouse.io/embed/job_board?for='
 
 # Name, GH key
@@ -17,15 +19,8 @@ firms = [
     ('Skylight', 'skylighthq')
 ]
 
-def already_in_jobs(current_item, items):
-    """
-    Simple helper function to check if a similar-ish item is already in the list of jobs
-    based on the company and job name.
-    """
-    return any(
-        item["company"] == current_item["company"] and item["title"] == current_item["title"]
-        for item in items
-    )
+
+
 
 def get_jobs():
     jobs = []
@@ -64,6 +59,8 @@ def get_jobs():
                     'pub_date': datetime.date.today()
                 }
                 if not already_in_jobs(new_job, jobs):
-                    jobs.append(new_job)    
+                    jobs.append(new_job)
+                else:
+                    print("Job already exists for %s and %s." % (co_name, title)) 
     return jobs
  

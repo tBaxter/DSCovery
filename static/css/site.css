@@ -6,14 +6,14 @@
 /* full color scheme from https://colorpalettes.net/color-palette-4508/ */
 :root {
   --max_width: 90vw;
-  --color-primary: #4C5D8B;
-  --color-primary-light: #6E8BB3;
+  --color-primary: #324372;
+  --color-primary-light: #5977a1;
   --color-primary-dark: #1B1F47;
   --color-danger: #a51e1e;
   --color-success: #138015;
   --color-info: #0f8894;
   --color-warning: #dc781a;
-  --color-background: #F9F7FA;
+  --color-background: #fdfcfd;
   --font-family: 'Montserrat', sans-serif;
 }
 
