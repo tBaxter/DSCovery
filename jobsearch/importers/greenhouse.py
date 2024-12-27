@@ -68,7 +68,11 @@ def get_jobs():
                 job_cards = section.find_all('tr', class_="job-post")
 
                 for card in job_cards:
-                    job_title = card.find("p", class_="body--medium").decompose().text.strip()
+                    job_title = card.find("p", class_="body--medium")
+                    # quick cleanup to remove junk from within th title
+                    for child in job_title.find_all("span"):
+                        child.decompose()
+                    job_title = job_title.text.strip()
                     title = f"{section_title}: {job_title}"
                     link = card.find('a')['href']
                     new_job = {
