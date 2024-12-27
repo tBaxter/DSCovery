@@ -75,10 +75,10 @@ def import_jobs(request):
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
     # We'll only check them if they've been around a little while, to reduce load
-    check_date = datetime.now(pytz.utc) - timedelta(days=15) # 15 days seems good
-    expire_date = datetime.now(pytz.utc) - timedelta(days=21) # 3 weeks
+    check_date = datetime.now(pytz.utc) - timedelta(days=20) 
+    expire_date = datetime.now(pytz.utc) - timedelta(days=30)
     deleted = 0
-    print('Expire date', expire_date)
+    #print('Expire date', expire_date)
     for job in Job.objects.filter(pub_date__lte=check_date):
         # TO-DO: we're fixing some naive datetimes here.
         # That should probably happen in the importers.

@@ -29,8 +29,8 @@ def get_jobs():
 
         if r.status_code != 200:
             print("Failed to get good response for %s: %s " % (co_name, r.status_code))
-            alt_url = 'https://job-boards.greenhouse.io/' + '/' + key
-            r = requests.get(alt_url, headers=settings.IMPORTER_HEADERS)
+            url = 'https://job-boards.greenhouse.io/' + '/' + key
+            r = requests.get(url, headers=settings.IMPORTER_HEADERS)
             if r.status_code != 200:
                 print("Failed to get good response with alt_url for %s: %s " % (co_name, r.status_code))
                 pass 
@@ -68,9 +68,9 @@ def get_jobs():
                 job_cards = section.find_all('tr', class_="job-post")
 
                 for card in job_cards:
-                    job_title = card.find("p", class_="body--medium").text.strip()
+                    job_title = card.find("p", class_="body--medium").decompose().text.strip()
                     title = f"{section_title}: {job_title}"
-                    link = root_url + card.find('a')['href']
+                    link = card.find('a')['href']
                     new_job = {
                         'company': co_name,
                         'job_id': link.rsplit('/')[-1],

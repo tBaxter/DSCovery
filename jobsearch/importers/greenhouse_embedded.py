@@ -12,7 +12,7 @@ firms = [
     ('BlueLabs', 'bluelabsanalyticsinc'),
     ('Capital Technology Group', 'capitaltg'),
     ('Fearless', 'fearless'),
-    ('MetroStar', 'metrostarsystems'),
+    #('MetroStar', 'metrostarsystems'),
     ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
