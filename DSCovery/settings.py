@@ -76,6 +76,8 @@ INSTALLED_APPS = [
 
     'profiles',
     'jobsearch',
+    
+    'django_celery_beat',
 
 ]
 
@@ -169,3 +171,23 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
+CELERY_TASK_RESULT_EXPIRES = 3600
+CELERYD_CONCURRENCY = 4
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERYD_MAX_TASKS_PER_CHILD = 10
+CELERYD_HIJACK_ROOT_LOGGER = False
+CELERYD_LOG_LEVEL = 'INFO'
+CELERYD_LOG_FILE = os.path.join(BASE_DIR, 'celery.log')
+CELERYD_PID_FILE = os.path.join(BASE_DIR, 'celeryd.pid')
+CELERYD_LOG_FORMAT = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
+CELERYD_TASK_LOG_FORMAT = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
+CELERYD_WORKER_LOG_FORMAT = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
+CELERYD_WORKER_TASK_LOG_FORMAT = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'

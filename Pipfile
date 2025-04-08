@@ -30,6 +30,9 @@ marshmallow = "==3.21.3"
 python-dotenv = "==1.0.1"
 markdown = "==3.6"
 pytz = "==2024.1"
+celery = "*"
+redis = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 
