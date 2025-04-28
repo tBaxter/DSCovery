@@ -53,7 +53,7 @@ def get_jobs():
                 job_cards = app_data.get('Jobs', [])
 
                 for card in job_cards:
-                    print(f"Raw published date: {card['PublishedDate']}")
+                    # Debug: print(f"Raw published date: {card['PublishedDate']}")
                     pub_date_str = card['PublishedDate']
                     pub_date = datetime.fromisoformat(pub_date_str).astimezone(pytz.utc)
                     one_week_ago = datetime.now(pytz.utc) - timedelta(days=7)
@@ -66,7 +66,7 @@ def get_jobs():
                             'job_id': card['JobId'],
                             'pub_date': pub_date_str
                         }
-                        print(f"✅ Keeping job: {job['title']} ({job['location']})")
+                        # Debug: print(f"✅ Keeping job: {job['title']} ({job['location']})")
                         jobs.append(job)
     return jobs
 
@@ -108,4 +108,4 @@ if __name__ == "__main__":
             if original_settings and 'django.conf' in sys.modules:
                 sys.modules['django.conf'].settings = original_settings
         except Exception as e:
-            print("⚠️ Skipped resetting Django settings due to:", str(e))
+            print("Skipped resetting Django settings due to:", str(e))
