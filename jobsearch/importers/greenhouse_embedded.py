@@ -19,9 +19,6 @@ firms = [
     ('Skylight', 'skylighthq')
 ]
 
-
-
-
 def get_jobs():
     jobs = []
     for firm in firms:    
