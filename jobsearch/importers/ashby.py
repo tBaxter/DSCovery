@@ -35,7 +35,12 @@ def get_jobs():
                 # Parse the JSON data
                 app_data_json = match.group(1)
                 app_data = json.loads(app_data_json)
-                job_cards = app_data.get('jobBoard', {}).get('jobPostings', [])
+                try:
+                    job_cards = app_data.get('jobBoard', {}).get('jobPostings', [])
+                except Exception as e:
+                    print("Failed to get job cards. Here's the error and the data", e)
+                    print(app_data)
+                    return
 
                 for card in job_cards:
                     jobs.append({
