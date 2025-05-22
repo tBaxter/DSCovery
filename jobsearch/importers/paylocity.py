@@ -15,6 +15,7 @@ firms = [
     ('eSimplicity', 'a2d790ab-c239-40b9-a6ea-9e5853bbd737/eSimplicity'),
     ('So Company', '1974d707-52df-497d-9c10-b664aec386a3/Storij-Inc-Current-Openings'),
     ('Vaultes', '512b109e-bb46-4419-98e4-84028b520a50/Vaultes-LLC/'),
+    ('Snowbird Agility', '7f253d89-50c7-45db-981f-2eb478344672/Snowbird-Agility'),
 ]
 
 
