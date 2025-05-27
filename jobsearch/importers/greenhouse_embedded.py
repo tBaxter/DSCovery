@@ -16,7 +16,8 @@ firms = [
     ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
-    ('Skylight', 'skylighthq')
+    ('Skylight', 'skylighthq'),
+    ('Inroads', 'inroads')
 ]
 
 
