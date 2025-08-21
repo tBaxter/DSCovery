@@ -38,7 +38,7 @@ def get_jobs():
                 try:
                     job_cards = app_data.get('jobBoard', {}).get('jobPostings', [])
                 except Exception as e:
-                    print("Failed to get job cards. Here's the error and the data", e)
+                    print("Failed to get job cards. Here's the error and the data  ", e)
                     print(app_data)
                     return
 
