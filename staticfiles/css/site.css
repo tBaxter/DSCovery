@@ -6,14 +6,16 @@
 /* full color scheme from https://colorpalettes.net/color-palette-4508/ */
 :root {
   --max_width: 90vw;
-  --color-primary: #4C5D8B;
-  --color-primary-light: #6E8BB3;
+/*  --color-primary: #324372;
+ --color-primary-light: #5977a1;*/
+  --color-primary: #36477A;
+  --color-primary-light: #36477A;
   --color-primary-dark: #1B1F47;
   --color-danger: #a51e1e;
   --color-success: #138015;
   --color-info: #0f8894;
   --color-warning: #dc781a;
-  --color-background: #F9F7FA;
+  --color-background: #fdfdfd;
   --font-family: 'Montserrat', sans-serif;
 }
 
@@ -48,36 +50,132 @@ body {
   font-family: var(--font-family);
 }
 
-a {color: var(--color-primary); }
+a {
+  color: var(--color-primary); 
+  transition: color 0.33s;
+}
 a:hover {color: var(--color-primary-dark); }
 
 
 [role=banner] {
   display: flex;
   align-items: center;
-  margin: 1.5em auto 1em;
+  margin: 1.5em auto 0;
   justify-content: flex-start;
   width: var(--max_width);
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5em
+  padding-bottom: 0.5em;
 }
 
 [role="banner"] h1 {
-  font-size: 2em;
+  font-size: 2.5em;
   font-weight: bold;
-  padding-right: 2em;
+  padding-right: 0.5em;
 
   a { text-decoration: none }
 }
+
 [role="banner"] h2 {
   margin-top: 0.25em;
   font-size: 0.875em;
 }
+.logo-prefix {
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+.logo-main {
+    font-weight: 300;
+    color: var(--color-primary);
+    position: relative;
+    left: -0.25em;
+}
+.site-name {
+  position: relative;
+  display: inline-block;
+}
+/* Sunburst effect */
+.site-name::before {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 16rem;
+  height: 11rem;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(82,115,179,0.10) 0deg 10deg,
+      rgba(114,135,180,0.05) 10deg 20deg
+    );
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  z-index: 1;
+  pointer-events: none;
+}
+
+[role="navigation"] {
+  background-color: var(--color-primary); 
+  position: relative;
+}
+[role="navigation"] ul {
+  max-width: var(--max_width);
+  margin: 0 auto;
+}
+[role="navigation"] li {
+  display: inline-block;
+  padding: 0.5em 1em 0.5em 0;
+}
+[role="navigation"] li a {
+  color: var(--color-background);
+  text-decoration: none;
+  font-size: 0.875em;
+}
+
+main {
+  max-width: var(--max_width);
+  margin: 0 auto;
+}
+
+.highlighted {
+  background-color: var(--color-primary-light);
+  margin-left: calc(-1 * (100vw - var(--max_width)) / 2);
+  margin-right: calc(-1 * (100vw - var(--max_width)) / 2);
+  padding: 2em 0; /* vertical padding */
+}
+
+.highlighted table,
+.highlighted h1 {
+  max-width: var(--max_width);
+  margin: 0 auto; /* center constrained content */
+}
+
+footer {
+  background-color: var(--color-primary); 
+  margin-bottom: 1em;
+  margin-top: 3em
+}
+footer div {
+  max-width: var(--max_width);
+  margin: 0 auto;
+  font-size: 0.75em;
+  text-align:right;
+  color: var(--color-background)
+}
+footer a {
+  color: var(--color-background);
+}
+/* Typography */
+p + * {margin-top: 1em}
+h1, h3 { 
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary-light)
+}
 
 .job-list {
     border-collapse: collapse;
-    width: var(--max_width);
-    margin: 0 auto 1em;
+    /*width: var(--max_width);*/
+    width: 100%;
+    margin: 0 auto 2em;
 
     caption {
       text-align: left;

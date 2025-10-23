@@ -18,3 +18,9 @@ def site_processor(request):
         'last_seen': last_seen,
         'authenticated_request': authenticated_request,
     }
+
+def practice_choices(request):
+    from jobsearch.models import PRACTICE_CHOICES
+    # turn dict into list of (key, label) pairs for templates
+    choices = [(k, v) for k, v in PRACTICE_CHOICES.items()]
+    return {"PRACTICE_CHOICES": choices}

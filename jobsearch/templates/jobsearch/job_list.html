@@ -4,6 +4,7 @@
 {% block content %}
 
 {% if highlighted %}
+<div class="highlighted">
 <h1>Highlighted {% if job_type %}{{ job_type.1 }}{% endif %} Jobs</h1>
 <table class="job-list fresh-list">
     <thead>
@@ -34,6 +35,7 @@
         </tr>
         {% endfor %}
 </table>
+</div>
 {% endif %}
 
 <h1>All {{ job_type.1 }} Jobs</h1>

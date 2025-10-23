@@ -9,7 +9,7 @@
     {{ site.name }} 
     {% block extra_title %}{% endblock %}
   </title>
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=5">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=6">
   {% block site_styles %}{% endblock %}
   <meta name="description" content="{% block description %}{% endblock %}">
 
@@ -44,7 +44,10 @@
         {% block site_name %}
           <h1 class="site-name">
             <a href="/" title="Home">
-              {% block logo %}{{ site.name }}{% endblock %}
+              {% block logo %}
+                <span class="logo-prefix">DSC</span>
+                <span class="logo-main">overy</span>
+              {% endblock %}
             </a>
           </h1>
           <h2>Aggregating civic tech jobs from <a href="http://digitalservicescoalition.org">Digital Services Coalition</a> companies and other modern civic tech firms.</h2>
@@ -61,6 +64,15 @@
             <li><a href="{{ page.url }}">{{ page.title }}</a></li>
         {% endfor %}
         <li><a href="{% url 'new_jobs' %}">New jobs</a></li>
+        <li>
+          <select id="practice-select"
+          onchange="if(this.value !== '') { window.location = '?job_type=' + encodeURIComponent(this.value); } else { window.location = window.location.pathname; }">
+            <option value="">All practices</option>
+              {% for key, label in PRACTICE_CHOICES %}
+                <option value="{{ key }}" {% if request.GET.job_type == key %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+          </select>
+        </li>
     </ul>
   </nav>
   <div id="wrapper">
