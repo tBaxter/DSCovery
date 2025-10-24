@@ -9,7 +9,9 @@
 /*  --color-primary: #324372;
  --color-primary-light: #5977a1;*/
   --color-primary: #36477A;
-  --color-primary-light: #36477A;
+  --color-primary-med: #546599;
+  --color-primary-light: #7586b8;
+  --color-primary-lighter: #dfe6fc;
   --color-primary-dark: #1B1F47;
   --color-danger: #a51e1e;
   --color-success: #138015;
@@ -17,6 +19,10 @@
   --color-warning: #dc781a;
   --color-background: #fdfdfd;
   --font-family: 'Montserrat', sans-serif;
+  --font-size-base: 16px;
+  --font-size-large: 18px;
+  --font-size-small: 14px;
+  --font-size-smaller: 12px;
 }
 
 /* quick reset. See https://mattbrictson.com/blog/css-normalize-and-reset */
@@ -115,19 +121,36 @@ a:hover {color: var(--color-primary-dark); }
 [role="navigation"] {
   background-color: var(--color-primary); 
   position: relative;
+  display: flex;
+  justify-content: center; /* center the inner container */
+  align-items: center;
+  width: 100%;
+  padding: 0.5em 0;
 }
 [role="navigation"] ul {
-  max-width: var(--max_width);
-  margin: 0 auto;
+  /* turn the nav list into a flex container that fills available width
+     but remains constrained by --max_width */
+  display: flex;
+  width: min(var(--max_width), 100%);
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  justify-content: space-between; /* spread items to fill the width */
+  align-items: center;
+  list-style: none;
 }
 [role="navigation"] li {
-  display: inline-block;
-  padding: 0.5em 1em 0.5em 0;
+  /* let each item expand evenly; remove inline-block */
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0;
 }
 [role="navigation"] li a {
   color: var(--color-background);
   text-decoration: none;
   font-size: 0.875em;
+  display: inline-block;
+  padding: 0.5em 0.25rem;
 }
 
 main {
@@ -136,10 +159,11 @@ main {
 }
 
 .highlighted {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-lighter);
   margin-left: calc(-1 * (100vw - var(--max_width)) / 2);
   margin-right: calc(-1 * (100vw - var(--max_width)) / 2);
   padding: 2em 0; /* vertical padding */
+  margin-bottom: 1em
 }
 
 .highlighted table,
@@ -168,7 +192,7 @@ p + * {margin-top: 1em}
 h1, h3 { 
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--color-primary-light)
+  color: var(--color-primary-med)
 }
 
 .job-list {
@@ -180,15 +204,32 @@ h1, h3 {
     caption {
       text-align: left;
       font-weight: bold;
-      font-size: 1.25em
+      font-size: var(--font-size-base);
+
+    }
+    caption a {
+        color: var(--color-background);
+        display: inline-block;
+        text-decoration: none;
+              background: var(--color-primary-light);
+              border-radius: 0.5em;
+              padding: 0.5em 1em;
+              margin-bottom: -0.5em;
     }
     th, td { 
         max-width: 700px;
         padding: 0.5em 1em;
-        border: 1px solid #eee;
+        border: 1px solid var(--color-primary-light);
+        font-size: var(--font-size-smaller);
     }
-    th {background: #eee}
-    td { font-size: 0.875em}
+    th {background: var(--color-primary-light); 
+      color:var(--color-background);
+      text-align: left;
+    }
+    td.job-link {
+        font-weight: 600;
+        font-size: var(--font-size-small)
+    }
     .status-1 { background: #FFFFE0}  /* Considering */
     .status-2 { background: #87CEEB } /* Applied */
     .status-3 {background: #D8BFD8}
