@@ -1,12 +1,12 @@
 # DSCovery
 
-DSCovery is a tool to find civic tech jobs with [Digital Services Coalition](http://digitalservicescoalition.org) firms. This is very much a work in progress, and I make no promises of stability.
+DSCovery is a tool I created to find civic tech jobs with [Digital Services Coalition](http://digitalservicescoalition.org) firms. You can see it live at https://dscovery.fly.dev
 
-You can see it live at https://dscovery.fly.dev
+It has importers for most common ATSs -- Greenhouse, Lever, Ashby, Paylocity, etc -- so adding additional companies is as simple as adding them to the list of companies using that ATS. We currently support more than 8 of the most common ATSs.
 
 Additional importers will be added as there is demand, and pull requests are welcomed.
 
-We will also add DSC-adjacent firms, if they're good folks in the civic tech space.
+For DSCovery, we will also add DSC-adjacent firms, if they're good folks in the civic tech space. Please fill out a pull request if you know of a company we should add.
 
 
 ## Installing and running locally
