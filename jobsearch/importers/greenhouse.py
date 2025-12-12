@@ -10,7 +10,7 @@ root_url = 'https://boards.greenhouse.io'
 # Name, GH key
 firms = [
     ('540.co', '540'),
-    ('A1M', 'a1mreferrals'),
+    ('A1M', 'a1msolutions'),
     ('Agile Six', 'agilesix'),
     ('Aquia', 'aquia'),
     ('Bloom Works', 'bloomworks'),
