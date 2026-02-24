@@ -28,6 +28,8 @@ def get_jobs():
         jobs = []
         for card in job_cards:
             title =  card.find('h4', class_="list-group-item-heading")
+            if title is None:
+                continue
             link = title.find('a')['href']
             jobs.append({
                 'company': co_name,
