@@ -102,7 +102,10 @@
     {% endblock %}
     {% block footer %}
       <div>
-        <p class="copyright">&copy; {{ now.year }} {{ site.name }} | <a href="{% url 'job_feed' %}">RSS</a></p>
+        <p class="copyright">
+          Built by <a href="https://www.linkedin.com/in/carter-baxter/">Carter Baxter</a> |
+          <a href="https://another.rodeo">Another Rodeo</a> | 
+          &copy; {{ now.year }} {{ site.name }} | <a href="{% url 'job_feed' %}">RSS</a></p>
       </div>
     {% endblock %}
   </footer>

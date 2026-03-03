@@ -110,16 +110,23 @@ def import_jobs(request):
         # TO-DO: Build in detail getters here
 
     jobs = []
+    # load all importer modules, respecting optional PRIORITY attribute
+    importer_modules = []
     for file_name in os.listdir(importers_dir):
-        if file_name.endswith('.py') and file_name != '__init__.py' and file_name !='utils.py':
+        if file_name.endswith('.py') and file_name not in ('__init__.py', 'utils.py'):
             module_name = file_name[:-3]  # Remove the .py extension
             module_path = os.path.join(importers_dir, file_name)
-            # Load the module
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            co_jobs = module.get_jobs()
-            jobs.extend(co_jobs) if co_jobs is not None else jobs
+            priority = getattr(module, 'PRIORITY', 0)
+            importer_modules.append((priority, module))
+    # sort by priority (lower runs first)
+    importer_modules.sort(key=lambda x: x[0])
+    # execute them in order
+    for _, module in importer_modules:
+        co_jobs = module.get_jobs()
+        jobs.extend(co_jobs) if co_jobs is not None else jobs
     
     existing_jobs = Job.objects.values_list("title", "new_company__importer_name")
     print('existing_jobs', existing_jobs)

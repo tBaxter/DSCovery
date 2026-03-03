@@ -8,7 +8,6 @@ root_url = 'https://jobs.lever.co'
 
 # Name, GH key
 firms = [
-    ('Bixal', 'bixal'),
     ('Coforma', 'coforma'),
     ('Corbalt', 'corbalt'),
     ('Exygy', 'exygy'),

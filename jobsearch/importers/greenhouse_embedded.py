@@ -11,8 +11,7 @@ root_url = 'https://boards.greenhouse.io/embed/job_board?for='
 firms = [
     ('BlueLabs', 'bluelabsanalyticsinc'),
     ('Capital Technology Group', 'capitaltg'),
-    ('Fearless', 'fearless'),
-    #('MetroStar', 'metrostarsystems'),
+    ('MetroStar', 'metrostarsystems'),
     ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
