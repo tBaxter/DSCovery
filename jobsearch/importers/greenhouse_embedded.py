@@ -6,17 +6,20 @@ from bs4 import BeautifulSoup
 from jobsearch.importers.utils import already_in_jobs
 
 root_url = 'https://boards.greenhouse.io/embed/job_board?for='
+alternate_url = 'https://job-boards.greenhouse.io/embed/job_board?for='
 
 # Name, GH key
 firms = [
     ('BlueLabs', 'bluelabsanalyticsinc'),
     ('Capital Technology Group', 'capitaltg'),
-    ('MetroStar', 'metrostarsystems'),
+    # ('MetroStar', 'metrostarsystems'), Metrostar floods the site. Don't know how to fix.
     ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
     ('Skylight', 'skylighthq'),
-    ('Inroads', 'inroads')
+    ('Softrams', "triafederal"),
+    ('Inroads', 'inroads'),
+    ('Truss', 'trussworksinc'),
 ]
 
 
@@ -31,7 +34,12 @@ def get_jobs():
         r = requests.get(url, headers=settings.IMPORTER_HEADERS)
         if r.status_code != 200:
             print("Failed to get good response for ", co_name, r.status_code)
-            pass 
+            print ("Trying alternate url for ", co_name)
+            url = alternate_url + key
+            r = requests.get(url, headers=settings.IMPORTER_HEADERS)
+            if r.status_code != 200:
+                print("Failed to get good response with alt_url for %s: %s " % (co_name, r.status_code))    
+                pass 
     
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")

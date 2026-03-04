@@ -15,8 +15,6 @@ firms = [
     ('MO Studio', 'MOstudio'),
     ('Nava', 'nava'),
     ('Skyward', 'skywarditsolutions'),
-    ('Softrams', 'softrams'),
-    ('Truss', 'trussworks')
 ]
 
 
