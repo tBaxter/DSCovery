@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 root_url = 'https://jobs.lever.co'
 
-# Name, GH key
+# Name,  key
 firms = [
     ('Coforma', 'coforma'),
     ('Corbalt', 'corbalt'),
@@ -15,6 +15,8 @@ firms = [
     ('MO Studio', 'MOstudio'),
     ('Nava', 'nava'),
     ('Skyward', 'skywarditsolutions'),
+    ('BLEN', 'blencorp'),
+    ('Bellese', 'bellese'),
 ]
 
 

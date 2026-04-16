@@ -10,6 +10,7 @@ root_url = 'https://jobs.ashbyhq.com'
 firms = [
     ('All Women Leadership', 'awlstrategies'),
     ('Verdance', 'verdance'),
+    ('Mighty Acorn', 'mightyacorn'),
 ]
 
 def get_jobs():
