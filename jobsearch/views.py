@@ -112,21 +112,48 @@ def import_jobs(request):
     jobs = []
     # load all importer modules, respecting optional PRIORITY attribute
     importer_modules = []
+    failed_importers = []
+    importer_results = []
+    
     for file_name in os.listdir(importers_dir):
         if file_name.endswith('.py') and file_name not in ('__init__.py', 'utils.py'):
             module_name = file_name[:-3]  # Remove the .py extension
             module_path = os.path.join(importers_dir, file_name)
-            spec = importlib.util.spec_from_file_location(module_name, module_path)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            priority = getattr(module, 'PRIORITY', 0)
-            importer_modules.append((priority, module))
+            try:
+                spec = importlib.util.spec_from_file_location(module_name, module_path)
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                priority = getattr(module, 'PRIORITY', 0)
+                importer_modules.append((priority, module, module_name))
+            except Exception as e:
+                failed_importers.append((module_name, str(e)))
+                print(f"Failed to load importer {module_name}: {e}")
+    
     # sort by priority (lower runs first)
     importer_modules.sort(key=lambda x: x[0])
+    
     # execute them in order
-    for _, module in importer_modules:
-        co_jobs = module.get_jobs()
-        jobs.extend(co_jobs) if co_jobs is not None else jobs
+    for _, module, module_name in importer_modules:
+        try:
+            co_jobs = module.get_jobs()
+            job_count = len(co_jobs) if co_jobs else 0
+            importer_results.append((module_name, job_count, None))
+            print(f"✓ {module_name}: {job_count} jobs")
+            jobs.extend(co_jobs) if co_jobs is not None else jobs
+        except Exception as e:
+            failed_importers.append((module_name, str(e)))
+            importer_results.append((module_name, 0, str(e)))
+            print(f"✗ {module_name} failed: {e}")
+    
+    # Summary report
+    print(f"\n--- Import Summary ---")
+    print(f"Total jobs collected: {len(jobs)}")
+    print(f"Importers loaded: {len(importer_modules)}")
+    if failed_importers:
+        print(f"Failed importers: {len(failed_importers)}")
+        for name, error in failed_importers:
+            print(f"  - {name}: {error}")
+    print("--- End Summary ---\n")
     
     existing_jobs = Job.objects.values_list("title", "new_company__importer_name")
     print('existing_jobs', existing_jobs)

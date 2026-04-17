@@ -15,6 +15,7 @@ firms = [
 
 def get_jobs():
     jobs = []
+    print("Importing Ashby jobs...")
     for firm in firms:
         co_name, key = firm
         print("Importing", co_name)
@@ -43,8 +44,8 @@ def get_jobs():
                     try:
                         job_cards = app_data.get('jobBoard', {}).get('jobPostings', [])
                     except Exception as e:
-                        print("Failed to get job cards. Here's the error and the data  ", e)
-                        #print(app_data)
+                        print("Failed to get job cards for ", co_name, ". Here's the error and the data  ", e)
+                        print(app_data)
                         continue
 
                     for card in job_cards:
