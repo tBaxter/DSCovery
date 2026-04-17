@@ -8,10 +8,8 @@ root_url = 'https://jobs.lever.co'
 
 # Name,  key
 firms = [
-    ('Coforma', 'coforma'),
     ('Corbalt', 'corbalt'),
     ('Exygy', 'exygy'),
-    ('Mastrics', 'mastrics'),
     ('MO Studio', 'MOstudio'),
     ('Nava', 'nava'),
     ('Skyward', 'skywarditsolutions'),
