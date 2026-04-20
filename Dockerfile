@@ -11,7 +11,7 @@ WORKDIR /code
 
 RUN pip install pipenv
 COPY Pipfile Pipfile.lock /code/
-RUN pipenv install --deploy --system
+RUN pipenv install --deploy --system && python -m playwright install chromium
 COPY . /code
 
 EXPOSE 8000
