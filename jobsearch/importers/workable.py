@@ -1,6 +1,6 @@
 from django.conf import settings
 import requests
-from jobsearch.importers.utils import already_in_jobs
+from jobsearch.importers.utils import already_in_jobs, fetch_response
 
 # Name, Workable company key
 firms = [
