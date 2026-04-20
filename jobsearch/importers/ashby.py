@@ -184,31 +184,48 @@ def _get_jobs_via_scraping(url, co_name):
     soup = BeautifulSoup(r.content, "html.parser")
     script_tag = soup.find('script', text=re.compile(r'window\.__appData\s*=\s*'))
     
-    if script_tag:
-        script_content = script_tag.string
-        match = re.search(r'window\.__appData\s*=\s*(\{.*\});', script_content)
+    if not script_tag:
+        print(f"No __appData script tag found for {co_name} - website structure may have changed")
+        return []
+    
+    script_content = script_tag.string
+    match = re.search(r'window\.__appData\s*=\s*(\{.*\});', script_content)
 
-        if match:
-            app_data_json = match.group(1)
-            app_data = json.loads(app_data_json)
-            
-            if app_data and app_data.get('jobBoard'):
-                try:
-                    job_cards = app_data['jobBoard'].get('jobPostings', [])
-                except Exception as e:
-                    print("Failed to get job cards for ", co_name, ". Here's the error and the data  ", e)
-                    print(app_data)
-                    return []
-                
-                for card in job_cards:
-                    co_jobs.append({
-                        'company': co_name,
-                        'title': card['title'],
-                        'link': url + "/" + card['id'],
-                        'location': card['locationName'],
-                        'job_id': card['jobId'],
-                        'pub_date': card['publishedDate']
-                    })
+    if not match:
+        print(f"Could not extract __appData JSON for {co_name}")
+        return []
+    
+    try:
+        app_data_json = match.group(1)
+        app_data = json.loads(app_data_json)
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse __appData JSON for {co_name}: {e}")
+        return []
+    
+    if not app_data or not app_data.get('jobBoard'):
+        print(f"No jobBoard data found for {co_name}")
+        return []
+    
+    try:
+        job_cards = app_data['jobBoard'].get('jobPostings', [])
+        print(f"Found {len(job_cards)} job postings for {co_name} via scraping")
+    except Exception as e:
+        print(f"Failed to get job cards for {co_name}: {e}")
+        return []
+    
+    for card in job_cards:
+        try:
+            co_jobs.append({
+                'company': co_name,
+                'title': card.get('title', ''),
+                'link': url + "/" + card.get('id', ''),
+                'location': card.get('locationName', 'Remote'),
+                'job_id': card.get('jobId', card.get('id', '')),
+                'pub_date': card.get('publishedDate', '2026-01-01')
+            })
+        except Exception as e:
+            print(f"Error processing job card for {co_name}: {e}")
+            continue
     
     return co_jobs
         

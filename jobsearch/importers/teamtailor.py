@@ -56,13 +56,22 @@ def get_jobs():
         soup = BeautifulSoup(html, "html.parser")
         # TeamTailor job card selectors
         job_cards = soup.find_all('a', class_='job-card')
+        print(f"Selector 1 (job-card): {len(job_cards)} cards")
+        
         if not job_cards:
             job_cards = soup.find_all('a', {'data-testid': 'job-listing-item'})
+            print(f"Selector 2 (data-testid): {len(job_cards)} cards")
+        
         if not job_cards:
             job_cards = soup.select('[class*="job"][class*="card"], [class*="listing"][class*="item"]')
+            print(f"Selector 3 (CSS combined): {len(job_cards)} cards")
 
         if not job_cards:
-            print(f"No job cards found for {co_name} (url={url})")
+            print(f"No job cards found for {co_name} (url={url}) - checking HTML for structure clues...")
+            # Log some sample HTML to help debug
+            all_a_tags = soup.find_all('a', limit=5)
+            print(f"Sample links found: {[a.get('class', 'no-class') for a in all_a_tags]}")
+            return jobs
         
         for card in job_cards:
             try:

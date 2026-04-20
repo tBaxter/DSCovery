@@ -43,6 +43,8 @@ def get_jobs():
     
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")
+        print(f"Found {len(sections)} sections for {co_name}")
+        
         for section in sections:
             try:
                 section_title =  section.find('h3').text.strip()
@@ -52,24 +54,35 @@ def get_jobs():
                 section_title = h2_tag.text.strip() if h2_tag else '' 
             # now get the cards for that section
             job_cards = section.find_all('div', class_="opening")
+            print(f"Found {len(job_cards)} job cards in section '{section_title}' for {co_name}")
+            
             for card in job_cards:
-                job_title = card.find("a").text.strip()
                 try:
-                    title = f"{section_title}: {job_title}"
-                except Exception:
-                    title = job_title
-                link = card.find('a')['href']
-                new_job = {
-                    'company': co_name,
-                    'job_id': link.rsplit('/')[-1],
-                    'title': title,
-                    'link': link,
-                    'location': card.find('span', class_="location").text.strip(),
-                    'pub_date': datetime.date.today()
-                }
-                if not already_in_jobs(new_job, jobs):
-                    jobs.append(new_job)
-                else:
-                    print("Job already exists for %s and %s." % (co_name, title)) 
+                    a_tag = card.find("a")
+                    if not a_tag:
+                        continue
+                    job_title = a_tag.text.strip()
+                    title = f"{section_title}: {job_title}" if section_title else job_title
+                    link = a_tag.get('href', '')
+                    if not link:
+                        continue
+                    
+                    location_span = card.find('span', class_="location")
+                    location = location_span.text.strip() if location_span else 'Unknown'
+                    
+                    new_job = {
+                        'company': co_name,
+                        'job_id': link.rsplit('/')[-1],
+                        'title': title,
+                        'link': link,
+                        'location': location,
+                        'pub_date': datetime.date.today()
+                    }
+                    if not already_in_jobs(new_job, jobs):
+                        jobs.append(new_job)
+                    else:
+                        print("Job already exists for %s and %s." % (co_name, title))
+                except Exception as e:
+                    print(f"Error parsing job card for {co_name}: {e}") 
     return jobs
  
