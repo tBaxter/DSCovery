@@ -138,22 +138,23 @@ def import_jobs(request):
             co_jobs = module.get_jobs()
             job_count = len(co_jobs) if co_jobs else 0
             importer_results.append((module_name, job_count, None))
-            print(f"✓ {module_name}: {job_count} jobs")
             jobs.extend(co_jobs) if co_jobs is not None else jobs
         except Exception as e:
             failed_importers.append((module_name, str(e)))
             importer_results.append((module_name, 0, str(e)))
-            print(f"✗ {module_name} failed: {e}")
     
-    # Summary report
-    print(f"\n--- Import Summary ---")
-    print(f"Total jobs collected: {len(jobs)}")
-    print(f"Importers loaded: {len(importer_modules)}")
-    if failed_importers:
-        print(f"Failed importers: {len(failed_importers)}")
-        for name, error in failed_importers:
-            print(f"  - {name}: {error}")
-    print("--- End Summary ---\n")
+    # Summary report as a table
+    print(f"\n")
+    print("+" + "-" * 72 + "+")
+    print(f"| {'Importer':<30} | {'Status':<8} | {'Jobs':>6} | {'Error':<20} |")
+    print("+" + "-" * 72 + "+")
+    for module_name, job_count, error in importer_results:
+        status = "✓ OK" if error is None else "✗ FAILED"
+        error_text = error[:17] + "..." if error and len(error) > 20 else (error or "")
+        print(f"| {module_name:<30} | {status:<8} | {job_count:>6} | {error_text:<20} |")
+    print("+" + "-" * 72 + "+")
+    print(f"Total jobs collected: {len(jobs)} | Importers: {len(importer_modules)} | Failed: {len(failed_importers)}")
+    print()
     
     existing_jobs = Job.objects.values_list("title", "new_company__importer_name")
     print('existing_jobs', existing_jobs)

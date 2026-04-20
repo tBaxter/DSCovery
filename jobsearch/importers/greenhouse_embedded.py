@@ -39,7 +39,7 @@ def get_jobs():
             r = requests.get(url, headers=settings.IMPORTER_HEADERS)
             if r.status_code != 200:
                 print("Failed to get good response with alt_url for %s: %s " % (co_name, r.status_code))    
-                pass 
+                continue 
     
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")
@@ -48,13 +48,14 @@ def get_jobs():
                 section_title =  section.find('h3').text.strip()
             except:
                 # but some people put it in an H2, and if we can't find one at all, we still need a value.
-                section_title = section.find('h2').text if len(section.find('h2'))!=0 else '' 
+                h2_tag = section.find('h2')
+                section_title = h2_tag.text.strip() if h2_tag else '' 
             # now get the cards for that section
             job_cards = section.find_all('div', class_="opening")
             for card in job_cards:
                 job_title = card.find("a").text.strip()
                 try:
-                    title = f"{section_title.text.strip()}: {job_title}"
+                    title = f"{section_title}: {job_title}"
                 except Exception:
                     title = job_title
                 link = card.find('a')['href']
