@@ -3,14 +3,14 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from jobsearch.importers.utils import already_in_jobs
+from jobsearch.importers.utils import already_in_jobs, fetch_response
 
 root_url = 'https://boards.greenhouse.io/embed/job_board?for='
 alternate_url = 'https://job-boards.greenhouse.io/embed/job_board?for='
 
 # Name, GH key
 firms = [
-    ('BlueLabs', 'bluelabsanalyticsinc'),
+    #('BlueLabs', 'bluelabsanalyticsinc'),
     ('Capital Technology Group', 'capitaltg'),
     # ('MetroStar', 'metrostarsystems'), Metrostar floods the site. Don't know how to fix.
     ('PBG Consulting', 'pbgconsultingllc'),
@@ -31,15 +31,13 @@ def get_jobs():
         co_name, key = firm
         # print("Importing", co_name)
         url = root_url + key
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to get good response for ", co_name, r.status_code)
-            print ("Trying alternate url for ", co_name)
+        r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+        if not r:
+            print("Trying alternate url for ", co_name)
             url = alternate_url + key
-            r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-            if r.status_code != 200:
-                print("Failed to get good response with alt_url for %s: %s " % (co_name, r.status_code))    
-                continue 
+            r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+            if not r:
+                continue
     
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")

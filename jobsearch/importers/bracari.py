@@ -2,6 +2,7 @@ from django.conf import settings
 import datetime
 import requests
 from bs4 import BeautifulSoup
+from jobsearch.importers.utils import fetch_response
 
 company = "Bracari"
 root_url = 'https://www.bracari.com'
@@ -9,10 +10,9 @@ url = root_url + '/join-us'
 
 def get_jobs():
     # print("Importing", company)
-    r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-    if r.status_code != 200:
-        #print("Failed to get good requests response: ", r.status_code)
-        return 
+    r = fetch_response('get', url, importer_name=company, headers=settings.IMPORTER_HEADERS)
+    if not r:
+        return []
     soup = BeautifulSoup(r.content, "html.parser")
 
     job_cards = soup.find_all('a', class_="career-card")

@@ -2,6 +2,7 @@ from django.conf import settings
 import datetime
 import requests
 from bs4 import BeautifulSoup
+from jobsearch.importers.utils import fetch_response
 
 
 root_url = 'https://jobs.lever.co'
@@ -25,10 +26,9 @@ def get_jobs():
         # print("Importing", co_name)
         url = root_url + '/' + key
 
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to get good response for ", co_name, r.status_code)
-            pass 
+        r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+        if not r:
+            continue
         soup = BeautifulSoup(r.content, "html.parser")
         job_wrapper = soup.find('div', class_='postings-wrapper')
         if job_wrapper:

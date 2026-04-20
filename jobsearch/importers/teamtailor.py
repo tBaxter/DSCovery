@@ -2,6 +2,7 @@ from django.conf import settings
 import datetime
 import requests
 from bs4 import BeautifulSoup
+from jobsearch.importers.utils import fetch_response
 
 # headless rendering helper
 try:
@@ -38,8 +39,8 @@ def get_jobs():
         print("Importing", co_name)
         html = None
         try:
-            r = requests.get(url, headers=settings.IMPORTER_HEADERS, timeout=10)
-            if r.status_code == 200:
+            r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS, timeout=10)
+            if r:
                 html = r.content
         except Exception as e:
             print("Requests fetch failed for", co_name, e)

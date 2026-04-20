@@ -2,6 +2,7 @@ import json
 import pytz
 import re
 import requests
+from jobsearch.importers.utils import fetch_response
 
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -26,10 +27,9 @@ def get_jobs():
         # print("Importing", co_name)
         url = root_url + '/recruiting/jobs/All/' + key
 
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to get good response for ", co_name, r.status_code)
-            pass 
+        r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+        if not r:
+            continue
         soup = BeautifulSoup(r.content, "html.parser")
         script_tag = soup.find('script', text=re.compile(r'window\.pageData\s*=\s*'))
 

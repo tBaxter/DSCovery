@@ -3,8 +3,7 @@ import datetime
 import requests
 import re
 from bs4 import BeautifulSoup
-
-from jobsearch.importers.utils import already_in_jobs
+from jobsearch.importers.utils import already_in_jobs, fetch_response
 
 # Name, career board URL
 firms = [
@@ -22,10 +21,9 @@ def get_jobs():
         # Append in_iframe=1 to get the job listing (served in embedded iframe)
         url = url + '&in_iframe=1'
         
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to get good response for %s: %s" % (company_name, r.status_code))
-            pass
+        r = fetch_response('get', url, importer_name=company_name, headers=settings.IMPORTER_HEADERS)
+        if not r:
+            continue
         
         soup = BeautifulSoup(r.content, "html.parser")
         job_cards = soup.find_all('li', class_='iCIMS_JobCardItem')

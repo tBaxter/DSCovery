@@ -4,6 +4,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from jobsearch.importers.utils import fetch_response
+
 root_url = 'https://jobs.ashbyhq.com'
 
 # Name, key
@@ -176,12 +178,11 @@ def _get_jobs_via_scraping(url, co_name):
     """Fallback method using old scraping approach"""
     co_jobs = []  # Initialize jobs list
     
-    r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-    if r.status_code != 200:
-        print("Failed to get good requests response: ", r.status_code)
+    response = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+    if response is None:
         return []
     
-    soup = BeautifulSoup(r.content, "html.parser")
+    soup = BeautifulSoup(response.content, "html.parser")
     script_tag = soup.find('script', text=re.compile(r'window\.__appData\s*=\s*'))
     
     if not script_tag:

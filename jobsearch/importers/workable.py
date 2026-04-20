@@ -58,17 +58,18 @@ def _fetch_jobs_via_api(company_key):
         'Accept': 'application/json',
     }
 
-    try:
-        response = requests.post(url, headers=headers, json={}, timeout=15)
-        if response.status_code != 200:
-            return None
+    response = fetch_response('post', url, importer_name=company_key, headers=headers, json={}, timeout=15)
+    if response is None:
+        return None
 
+    try:
         payload = response.json()
-        if not isinstance(payload, dict):
-            return None
-        return payload.get('results', []) or []
     except Exception:
         return None
+
+    if not isinstance(payload, dict):
+        return None
+    return payload.get('results', []) or []
 
 
 def _fetch_jobs_via_playwright(company_key):

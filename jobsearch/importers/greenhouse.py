@@ -3,7 +3,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from jobsearch.importers.utils import already_in_jobs
+from jobsearch.importers.utils import already_in_jobs, fetch_response
 
 root_url = 'https://boards.greenhouse.io'
 
@@ -26,15 +26,13 @@ def get_jobs():
         co_name, key = firm
         url = root_url + '/' + key
 
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
+        r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
 
-        if r.status_code != 200:
-            print("Failed to get good response for %s: %s " % (co_name, r.status_code))
+        if not r:
             url = 'https://job-boards.greenhouse.io/' + '/' + key
-            r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-            if r.status_code != 200:
-                print("Failed to get good response with alt_url for %s: %s " % (co_name, r.status_code))
-                pass 
+            r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+            if not r:
+                continue
         
         soup = BeautifulSoup(r.content, "html.parser")
         sections = soup.find_all('section', class_="level-0")

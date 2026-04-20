@@ -3,6 +3,8 @@ from django.conf import settings
 import json
 from datetime import datetime, timezone
 
+from jobsearch.importers.utils import fetch_response
+
 # Name, base URL
 firms = [
     ('Coforma', 'https://coforma.pinpointhq.com'),
@@ -31,8 +33,9 @@ def _scrape_jobs_json(base_url, co_name):
         postings_url = f"{base_url}/en/postings"
         headers = settings.IMPORTER_HEADERS.copy() if hasattr(settings, 'IMPORTER_HEADERS') else {}
         
-        response = requests.get(postings_url, headers=headers, timeout=30)
-        response.raise_for_status()
+        response = fetch_response('get', postings_url, importer_name=co_name, headers=headers, timeout=30)
+        if response is None:
+            return jobs
         
         # Parse JSON data
         data = response.json()

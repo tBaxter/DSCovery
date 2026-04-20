@@ -2,6 +2,7 @@ from django.conf import settings
 import datetime
 import requests
 from bs4 import BeautifulSoup
+from jobsearch.importers.utils import fetch_response
 
 root_url = '.applytojob.com/apply/'
 
@@ -19,10 +20,9 @@ def get_jobs():
         co_name, key = firm
         # print("Importing", co_name)
         url = 'https://' + key + root_url
-        r = requests.get(url, headers=settings.IMPORTER_HEADERS)
-        if r.status_code != 200:
-            print("Failed to get good requests response: ", r.status_code)
-            return 
+        r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
+        if not r:
+            continue
         soup = BeautifulSoup(r.content, "html.parser")
         job_cards = soup.find('div', class_='jobs-list').find_all('li', class_="list-group-item")
         jobs = []
