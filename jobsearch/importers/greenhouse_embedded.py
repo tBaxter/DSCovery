@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 
 from jobsearch.importers.utils import already_in_jobs, fetch_response
 
-root_url = 'https://boards.greenhouse.io/embed/job_board?for='
-alternate_url = 'https://job-boards.greenhouse.io/embed/job_board?for='
+root_url = 'https://job-boards.greenhouse.io/embed/job_board?for='
+alternate_url = 'https://boards.greenhouse.io/embed/job_board?for='
 
 # Name, GH key
 firms = [
@@ -41,49 +41,44 @@ def get_jobs():
                     print(f"Both URLs failed for {co_name}")
                     continue
             
-            print(f"Successfully fetched {url} for {co_name}")
+            # print(f"Successfully fetched {url} for {co_name}")
             soup = BeautifulSoup(r.content, "html.parser")
             
             # Try multiple selector strategies
             jobs_found = False
             
             # Strategy 1: Original selectors
-            sections = soup.find_all('section', class_="level-0")
-            print(f"Strategy 1: Found {len(sections)} sections with class='level-0' for {co_name}")
+            posts = soup.find_all('tr', class_="job-post")
+            print(f"Strategy 1: Found {len(posts)} job post rows for {co_name}")
             
-            if sections:
-                for section in sections:
-                    job_cards = section.find_all('div', class_="opening")
-                    print(f"  Found {len(job_cards)} openings in section")
-                    if job_cards:
-                        jobs_found = True
-                        # Process job cards...
-                        for card in job_cards:
-                            try:
-                                a_tag = card.find("a")
-                                if not a_tag:
-                                    continue
-                                job_title = a_tag.text.strip()
-                                link = a_tag.get('href', '')
-                                if not link:
-                                    continue
-                                
-                                location_span = card.find('span', class_="location")
-                                location = location_span.text.strip() if location_span else 'Unknown'
-                                
-                                new_job = {
-                                    'company': co_name,
-                                    'job_id': link.rsplit('/')[-1],
-                                    'title': job_title,
-                                    'link': link,
-                                    'location': location,
-                                    'pub_date': datetime.date.today()
-                                }
-                                if not already_in_jobs(new_job, jobs):
-                                    jobs.append(new_job)
-                                    print(f"  Added job: {job_title}")
-                            except Exception as e:
-                                print(f"  Error parsing job card: {e}")
+            if posts:
+                jobs_found = True
+                for post in posts:
+                    try:
+                        a_tag = post.find("a")
+                        if not a_tag:
+                            continue
+                        job_title = a_tag.find('p', class_="body--medium").text.strip()
+                        link = a_tag.get('href', '')
+                        if not link:
+                            continue
+                        
+                        location_data = a_tag.find('p', class_="body--metadata")
+                        location = location_data.text.strip() if location_data else 'Unknown'
+                        
+                        new_job = {
+                            'company': co_name,
+                            'job_id': link.rsplit('/')[-1],
+                            'title': job_title,
+                            'link': link,
+                            'location': location,
+                            'pub_date': datetime.date.today()
+                        }
+                        if not already_in_jobs(new_job, jobs):
+                            jobs.append(new_job)
+                            print(f"  Added job: {job_title}")
+                    except Exception as e:
+                        print(f"  Error parsing job card: {e}")
             
             # Strategy 2: Look for any job links on the page
             if not jobs_found:
