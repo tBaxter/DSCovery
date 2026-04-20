@@ -13,7 +13,7 @@ def get_jobs():
     
     for firm in firms:
         co_name, base_url = firm
-        print(f"Importing {co_name}")
+        # print(f"Importing {co_name}")
         
         try:
             jobs.extend(_scrape_jobs_json(base_url, co_name))

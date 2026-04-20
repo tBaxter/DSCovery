@@ -21,7 +21,7 @@ firms = [
 
 def get_jobs():
     jobs = []
-    print("Importing greenhouse")
+    # print("Importing greenhouse")
     for firm in firms:    
         co_name, key = firm
         url = root_url + '/' + key

@@ -27,8 +27,8 @@ def get_jobs():
     jobs = []
     for firm in firms:    
         co_name, url = firm
-        print("Importing", co_name)
-        print("url", url)
+        #print("Importing", co_name)
+        # print("url", url)
 
         r = requests.get(url, headers=settings.IMPORTER_HEADERS)
         if r.status_code != 200:

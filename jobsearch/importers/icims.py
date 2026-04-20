@@ -17,7 +17,7 @@ def get_jobs():
     jobs = []
     
     for company_name, url in firms:
-        print("Importing", company_name)
+        # print("Importing", company_name)
         
         # Append in_iframe=1 to get the job listing (served in embedded iframe)
         url = url + '&in_iframe=1'

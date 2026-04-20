@@ -8,7 +8,7 @@ root_url = 'https://www.bracari.com'
 url = root_url + '/join-us'
 
 def get_jobs():
-    print("Importing", company)
+    # print("Importing", company)
     r = requests.get(url, headers=settings.IMPORTER_HEADERS)
     if r.status_code != 200:
         #print("Failed to get good requests response: ", r.status_code)

@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 url = 'https://www.archesys.io/roles'
 
 def get_jobs():
-    print("Importing ArcheSys")
+    # print("Importing ArcheSys")
     r = requests.get(url, headers=settings.IMPORTER_HEADERS)
     if r.status_code != 200:
         print("Failed to get good requests response: ", r.status_code)

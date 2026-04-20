@@ -113,7 +113,7 @@ def get_jobs():
     jobs = []
 
     for company_name, company_key in firms:
-        print('Importing', company_name)
+        # print('Importing', company_name)
 
         job_cards = _fetch_jobs_via_api(company_key)
         if job_cards is None:
