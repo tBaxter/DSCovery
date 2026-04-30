@@ -12,7 +12,7 @@ firms = [
     ('Corbalt', 'corbalt'),
     ('Exygy', 'exygy'),
     ('MO Studio', 'MOstudio'),
-    ('Nava', 'nava'),
+    #('Nava', 'nava'),
     ('Skyward', 'skywarditsolutions'),
     ('BLEN', 'blencorp'),
     ('Bellese', 'bellese'),

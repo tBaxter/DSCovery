@@ -15,6 +15,7 @@ firms = [
     ('Aquia', 'aquia'),
     ('Bloom Works', 'bloomworks'),
     ('CivicActions', 'civicactions'),
+    ('Nava', 'navapbc'),
     ('Oddball', 'oddball'),
     ('Raft', 'raft'),
 ]
