@@ -83,9 +83,17 @@ def get_jobs():
             job_cards = section.find_all('div', class_="opening")
 
             for card in job_cards:
-                job_title = card.find("a").text.strip()
+                a_tag = card.find("a")
+                if a_tag:
+                    # Remove extraneous child elements (like 'new', 'tag', etc.)
+                    for child in a_tag.find_all(['span', 'badge', 'em', 'strong']):
+                        if any(cls in child.get('class', []) for cls in ['tag', 'badge', 'new', 'featured']):
+                            child.decompose()
+                    job_title = a_tag.get_text(strip=True)
+                else:
+                    job_title = ''
                 title = f"{section_title}: {job_title}"
-                link = root_url + card.find('a')['href']
+                link = root_url + a_tag['href'] if a_tag else ''
                 new_job = {
                     'company': co_name,
                     'job_id': link.rsplit('/')[-1],
