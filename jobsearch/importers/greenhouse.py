@@ -1,3 +1,37 @@
+def map_section_to_practice(section_title):
+    section_lower = section_title.lower()
+    mappings = {
+        'engineering': 'engineering',
+        'developer': 'engineering',
+        'backend': 'engineering',
+        'frontend': 'engineering',
+        'design': 'design',
+        'ux': 'design',
+        'research': 'design',
+        'product': 'product',
+        'pm': 'product',
+        'data': 'data',
+        'analytics': 'data',
+        'business development': 'bd',
+        'sales': 'bd',
+        'marketing': 'content',
+        'content': 'content',
+        'communications': 'content',
+        'security': 'security',
+        'devops': 'engineering',
+        'infra': 'engineering',
+        'operations': 'office',
+        'finance': 'office',
+        'human resources': 'office',
+        'hr': 'office',
+        'support': 'help',
+        'customer success': 'help',
+        'cs': 'help',
+    }
+    for keyword, practice in mappings.items():
+        if keyword in section_lower:
+            return practice
+    return 'other'
 from django.conf import settings
 import datetime
 import requests
@@ -45,6 +79,7 @@ def get_jobs():
             table_layout = True
         for section in sections:
             section_title =  section.find('h3').text.strip()
+            job_type = map_section_to_practice(section_title)
             job_cards = section.find_all('div', class_="opening")
 
             for card in job_cards:
@@ -57,7 +92,8 @@ def get_jobs():
                     'title': title,
                     'link': link,
                     'location': card.find('span', class_="location").text.strip(),
-                    'pub_date': datetime.date.today()
+                    'pub_date': datetime.date.today(),
+                    'job_type': job_type
                 }
                 if not already_in_jobs(new_job, jobs):
                     jobs.append(new_job)
@@ -65,6 +101,7 @@ def get_jobs():
             sections = soup.find_all('div', class_="job-posts")
             for section in sections:
                 section_title =  section.find('h3').text.strip()
+                job_type = map_section_to_practice(section_title)
                 job_cards = section.find_all('tr', class_="job-post")
 
                 for card in job_cards:
@@ -81,7 +118,8 @@ def get_jobs():
                         'title': title,
                         'link': link,
                         'location': card.find('p', class_="body--metadata").text.strip(),
-                        'pub_date': datetime.date.today()
+                        'pub_date': datetime.date.today(),
+                        'job_type': job_type
                     }
                     if not already_in_jobs(new_job, jobs):
                         jobs.append(new_job)

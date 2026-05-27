@@ -58,7 +58,16 @@ def get_jobs():
                         a_tag = post.find("a")
                         if not a_tag:
                             continue
-                        job_title = a_tag.find('p', class_="body--medium").text.strip()
+                        job_title_elem = a_tag.find('p', class_="body--medium")
+                        # Remove extraneous child elements (tags, badges, etc.)
+                        if job_title_elem:
+                            for tag in job_title_elem.find_all(['span', 'badge', 'em', 'strong']):
+                                if any(cls in tag.get('class', []) for cls in ['tag', 'badge', 'new', 'featured']):
+                                    tag.decompose()
+                            # Get only the direct text (not from child elements)
+                            job_title = job_title_elem.get_text(strip=True)
+                        else:
+                            job_title = a_tag.get_text(strip=True)
                         link = a_tag.get('href', '')
                         if not link:
                             continue
@@ -140,20 +149,7 @@ def get_jobs():
                             print(f"  Added job via strategy 2: {title}")
                     except Exception as e:
                         print(f"  Error parsing link: {e}")
-            
-            # Strategy 3: Look for structured job data
-            if not jobs_found:
-                print(f"Strategy 3: Looking for structured data for {co_name}")
-                # Look for JSON data in script tags
-                scripts = soup.find_all('script', string=lambda x: x and ('job' in x.lower() or 'posting' in x.lower()))
-                for script in scripts:
-                    try:
-                        script_text = script.string
-                        if 'window.' in script_text and ('jobs' in script_text.lower() or 'postings' in script_text.lower()):
-                            print(f"  Found potential job data in script tag")
-                            # Could parse JSON here if needed
-                    except:
-                        pass
+        
             
             if not jobs_found:
                 print(f"No jobs found for {co_name} using any strategy")
