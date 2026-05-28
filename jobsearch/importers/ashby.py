@@ -8,11 +8,10 @@ from jobsearch.importers.utils import fetch_response
 
 root_url = 'https://jobs.ashbyhq.com'
 
-# Name, key
+# Name, key (Ashby subdomain)
 firms = [
-    ('All Women Leadership', 'awlstrategies'),
     ('Verdance', 'verdance'),
-    ('Mighty Acorn', 'mightyacorn'),
+    ('Mighty Acorn', 'mightyacorndigital'),  
 ]
 
 try:

@@ -10,9 +10,7 @@ alternate_url = 'https://boards.greenhouse.io/embed/job_board?for='
 
 # Name, GH key
 firms = [
-    #('BlueLabs', 'bluelabsanalyticsinc'),
     ('Capital Technology Group', 'capitaltg'),
-    # ('MetroStar', 'metrostarsystems'), Metrostar floods the site. Don't know how to fix.
     ('PBG Consulting', 'pbgconsultingllc'),
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
@@ -85,7 +83,7 @@ def get_jobs():
                         }
                         if not already_in_jobs(new_job, jobs):
                             jobs.append(new_job)
-                            print(f"  Added job: {job_title}")
+                            # print(f"  Added job: {job_title}")
                     except Exception as e:
                         print(f"  Error parsing job card: {e}")
             
