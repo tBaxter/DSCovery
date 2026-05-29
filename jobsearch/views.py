@@ -74,11 +74,15 @@ def import_jobs(request):
     """
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
-    # We'll only check them if they've been around a little while, to reduce load
-    check_date = datetime.now(pytz.utc) - timedelta(days=20) 
-    expire_date = datetime.now(pytz.utc) - timedelta(days=30)
+    # Any job more than 21 days old is old and deleted without checking 
+    # if it's still posted. If it is, it will just get re-imported.
+    expire_date = datetime.now(pytz.utc) - timedelta(days=21)
+    # Jobs past this date have been around a little while, 
+    # so we need to check if they're still valid.
+    # To reduce load, we don't check any jobs newer than this
+    check_date = datetime.now(pytz.utc) - timedelta(days=14)
+    
     deleted = 0
-    #print('Expire date', expire_date)
     for job in Job.objects.filter(pub_date__lte=check_date):
         # TO-DO: we're fixing some naive datetimes here.
         # That should probably happen in the importers.
@@ -88,7 +92,6 @@ def import_jobs(request):
         
         # First, if the job is past the expiration date, just delete it.
         if pub_date <= expire_date:
-            print("Deleting old job", job)
             job.delete()
             deleted += 1
             continue
