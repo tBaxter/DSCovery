@@ -49,7 +49,7 @@ class FreshJobListView(ListView):
     template_name = "jobsearch/fresh_job_list.html"
 
     def get_queryset(self):
-        fresh = datetime.now(pytz.utc) - timedelta(days=10)
+        fresh = datetime.now(pytz.utc) - timedelta(days=7)
         return Job.objects.filter(pub_date__gte=fresh, rejected=False)
     
 
