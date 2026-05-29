@@ -7,7 +7,6 @@ from jobsearch.importers.utils import already_in_jobs, fetch_response
 
 # Name, career board URL
 firms = [
-    ('Valiant', 'https://careers-valiantsolutions.icims.com/jobs/search?hashed=-435594529&mobile=false&width=565&height=500&bga=true&needsRedirect=false&jan1offset=-300&jun1offset=-240'),
     ('Steampunk', 'https://careers-steampunk.icims.com/jobs/search?ss=1&hashed=-435593565'),
     ('Granicus', 'https://careers-granicus.icims.com/jobs/search'),
 ]
