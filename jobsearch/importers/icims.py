@@ -1,6 +1,5 @@
 from django.conf import settings
 import datetime
-import requests
 import re
 from bs4 import BeautifulSoup
 from jobsearch.importers.utils import already_in_jobs, fetch_response

@@ -65,12 +65,5 @@ You should now be able to go to http://127.0.0.1:8000 to see the application run
 
 - The project dynamically loads `jobsearch/importers/*.py` modules.  Each
   importer may set a `PRIORITY` variable (default `0`) to influence the order
-  they run; lower values execute first.  The new TeamTailor and Phenom
-  importers set `PRIORITY = 10` so they run after all other importers, which
-  helps avoid slowing down the core scrapers.
-- TeamTailor and Phenom People sites render jobs in JavaScript.  The new
-  `teamtailor.py` and `phenom.py` importers try a plain HTTP fetch, but if no
-  job cards are found they fall back to launching a headless Playwright
-  browser to render the page before scraping.  Make sure Playwright is
-  installed if you plan to import companies using these platforms (e.g. Bixal,
-  Fearless).
+  they run; lower values execute first.  This can be useful if you're importer loads Playwright or something else that can make execution slow.
+

@@ -1,15 +1,13 @@
 from django.conf import settings
 import datetime
-import requests
 from bs4 import BeautifulSoup
 from jobsearch.importers.utils import fetch_response
 
 
 root_url = 'https://jobs.jobvite.com'
 
-# Name, GH key
+# Name, key
 firms = [
-    ('Clarity Innovations', 'clarityinnovations'),
     ('ArcAspicio', 'arc-aspicio')
 ]
 
@@ -17,7 +15,6 @@ def get_jobs():
     jobs = []
     for firm in firms:
         co_name, key = firm
-        # print("Importing", co_name)
         url = root_url + '/' + key
 
         r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)

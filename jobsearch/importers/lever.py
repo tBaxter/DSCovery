@@ -10,6 +10,7 @@ root_url = 'https://jobs.lever.co'
 # Name,  key
 firms = [
     ('Corbalt', 'corbalt'),
+    ('Element', 'elementsolutions'),
     ('Exygy', 'exygy'),
     ('MO Studio', 'MOstudio'),
     ('Skyward', 'skywarditsolutions'),
@@ -22,7 +23,6 @@ def get_jobs():
     jobs = []
     for firm in firms:
         co_name, key = firm
-        # print("Importing", co_name)
         url = root_url + '/' + key
 
         r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
