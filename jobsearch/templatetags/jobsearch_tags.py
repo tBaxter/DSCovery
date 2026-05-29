@@ -13,10 +13,17 @@ def show_jobs(context, company, job_type):
     """
     output_text = u''
 
-    jobs = company.job_set.filter(rejected=False).order_by("job_type", "title")
+    from datetime import datetime, timedelta
+    import pytz
+    now = datetime.now(pytz.utc)
+    week_ago = now - timedelta(days=7)
+    jobs = company.job_set.filter(rejected=False)
     if job_type:
-        jobs = jobs.filter(rejected=False, job_type=job_type).order_by("title")
-
+        jobs = jobs.filter(job_type=job_type)
+    jobs = jobs.order_by('-pub_date')
+    # Annotate jobs with is_new
+    for job in jobs:
+        job.is_new = job.pub_date and job.pub_date >= week_ago
     return {
         'jobs': jobs,
         'job_type': job_type,

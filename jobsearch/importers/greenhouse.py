@@ -43,7 +43,7 @@ root_url = 'https://boards.greenhouse.io'
 
 # Name, GH key
 firms = [
-    ('540.co', '540'),
+    # ('540.co', '540'), removed because of focus of work
     ('A1M', 'a1msolutions'),
     ('Agile Six', 'agilesix'),
     ('Aquia', 'aquia'),
@@ -92,7 +92,7 @@ def get_jobs():
                     job_title = a_tag.get_text(strip=True)
                 else:
                     job_title = ''
-                title = f"{section_title}: {job_title}"
+                title = f"{job_title}"
                 link = root_url + a_tag['href'] if a_tag else ''
                 new_job = {
                     'company': co_name,
@@ -118,7 +118,7 @@ def get_jobs():
                     for child in job_title.find_all("span"):
                         child.decompose()
                     job_title = job_title.text.strip()
-                    title = f"{section_title}: {job_title}"
+                    title = f"{job_title}"
                     link = card.find('a')['href']
                     new_job = {
                         'company': co_name,
