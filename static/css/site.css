@@ -155,14 +155,14 @@ a:hover {color: var(--color-primary-dark); }
 
 main {
   max-width: var(--max_width);
-  margin: 0 auto;
+  margin: 1em auto;
 }
 
 .highlighted {
   background-color: var(--color-primary-lighter);
   margin-left: calc(-1 * (100vw - var(--max_width)) / 2);
   margin-right: calc(-1 * (100vw - var(--max_width)) / 2);
-  padding: 2em 0; /* vertical padding */
+  padding: 1em 0 2em; /* vertical padding */
   margin-bottom: 1em
 }
 

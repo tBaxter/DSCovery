@@ -5,9 +5,9 @@ from jobsearch.models import Job
 
 
 class JobFeed(Feed):
-    title = "DSCovery Jobs"
+    title = "Jobs"
     link = "/feeds/jobs/"
-    description = "Jobs aggregated recently on DSCovery."
+    description = "Modern civic tech jobs aggregated recently."
 
     def items(self):
         return Job.objects.order_by("-pub_date")[:50]
