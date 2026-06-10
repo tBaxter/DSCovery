@@ -56,16 +56,16 @@ def get_jobs():
                         a_tag = post.find("a")
                         if not a_tag:
                             continue
-                            job_title_elem = a_tag.find('p', class_="body--medium")
-                            import re
-                            # Get only direct text (ignore all child elements)
-                            if job_title_elem:
-                                job_title = ''.join(t for t in job_title_elem.find_all(string=True, recursive=False)).strip()
-                            else:
-                                job_title = a_tag.get_text(strip=True)
-                            # Remove common extraneous words
-                            for word in ['new', 'tag', 'featured', 'badge']:
-                                job_title = re.sub(rf'\b{word}\b', '', job_title, flags=re.IGNORECASE).strip()
+                        job_title_elem = a_tag.find('p', class_="body--medium")
+                        # Remove extraneous child elements (tags, badges, etc.)
+                        if job_title_elem:
+                            for tag in job_title_elem.find_all(['span', 'badge', 'em', 'strong']):
+                                if any(cls in tag.get('class', []) for cls in ['tag', 'badge', 'new', 'featured']):
+                                    tag.decompose()
+                            # Get only the direct text (not from child elements)
+                            job_title = job_title_elem.get_text(strip=True)
+                        else:
+                            job_title = a_tag.get_text(strip=True)
                         link = a_tag.get('href', '')
                         if not link:
                             continue
@@ -126,9 +126,6 @@ def get_jobs():
                         
                         # Clean up title
                         title = title.replace('\n', ' ').replace('\r', ' ').strip()
-                            # Remove common extraneous words
-                            for word in ['new', 'tag', 'featured', 'badge']:
-                                title = re.sub(rf'\b{word}\b', '', title, flags=re.IGNORECASE).strip()
                         if len(title) > 100:  # Truncate very long titles
                             title = title[:97] + '...'
                         

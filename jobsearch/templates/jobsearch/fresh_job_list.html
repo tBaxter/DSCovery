@@ -3,18 +3,24 @@
 
 {% block content %}
 
-<h1>New {% if job_type %}{{ job_type.1 }}{% endif %} Jobs</h1>
+<header class="fresh-header">
+    <h1>New {% if job_type %}{{ job_type.1 }} {% endif %}Jobs</h1>
+    <p class="muted">Showing {{ object_list|length }} recent openings — newest first.</p>
+</header>
+
 <table class="job-list fresh-list">
     <thead>
         <tr>
-        <th>Company</th>
-        <th>Job</th>
-        <th>Tagged</th>
-        <th>Location</th>
+            <th>Company</th>
+            <th>Job</th>
+            <th>Tagged</th>
+            <th>Location</th>
+            <th>Age</th>
         </tr>
     </thead>
+    <tbody>
         {% for job in object_list|dictsortreversed:"pub_date" %}
-        <tr class="status-{{ job.status }}" id="job-{{ job.pk }}">
+        <tr id="job-{{ job.pk }}">
             <td>
                 <a href="{% url 'company_detail' job.new_company.slug %}">{{ job.new_company }}</a>
             </td>
@@ -26,9 +32,12 @@
                     <a href="{% url 'jobs' %}?job_type={{ job.job_type }}">{{ job.get_job_type_display }}</a>
                 {% endif %}
             </td>
-            
             <td>{{ job.location }}</td>
+            <td>{{ job.pub_date|short_timesince|default_if_none:"" }} ago</td>
         </tr>
+        {% empty %}
+        <tr><td colspan="5">No recent jobs found.</td></tr>
         {% endfor %}
+    </tbody>
 </table>
 {% endblock %}
