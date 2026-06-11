@@ -27,7 +27,7 @@ def get_jobs():
     
     for firm in firms:
         co_name, key = firm
-        print("Importing", co_name)
+        # print("Importing", co_name)
         url = root_url + '/' + key
 
         # Try simple scraping first

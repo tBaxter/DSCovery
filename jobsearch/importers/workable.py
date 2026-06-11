@@ -6,8 +6,6 @@ from jobsearch.importers.utils import already_in_jobs, fetch_response
 firms = [
     ('Blue Tiger', 'blue-tiger'),
     ('Friends From The City', 'friends-from-the-city'),
-    ('Pixel Creative', 'pixel-creative'),
-    ('Public Digital', 'public-digital-1'),
 ]
 
 try:

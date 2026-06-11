@@ -15,7 +15,7 @@ from jobsearch.importers.utils import already_in_jobs, fetch_response
 url = 'https://adhoc.hrmdirect.com/employment/rss.php?search=true&cust_sort1=245588&'
 
 def get_jobs():
-    print("Importing Ad Hoc from RSS feed")
+    #print("Importing Ad Hoc from RSS feed")
     
     response = fetch_response('get', url, importer_name='Ad Hoc', headers=settings.IMPORTER_HEADERS)
     if response is None:

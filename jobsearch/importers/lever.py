@@ -11,7 +11,7 @@ root_url = 'https://jobs.lever.co'
 firms = [
     ('Corbalt', 'corbalt'),
     ('Element', 'elementsolutions'),
-    ('Exygy', 'exygy'),
+    # ('Exygy', 'exygy'),
     ('MO Studio', 'MOstudio'),
     ('Skyward', 'skywarditsolutions'),
     ('BLEN', 'blencorp'),

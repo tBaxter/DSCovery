@@ -43,7 +43,7 @@ def get_jobs():
     jobs = []
 
     for co_name, url in firms:
-        print(f"Importing {co_name}")
+        # print(f"Importing {co_name}")
         html = None
 
         # --- attempt 1: plain HTTP ---

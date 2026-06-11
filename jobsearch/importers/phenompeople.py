@@ -89,7 +89,7 @@ def get_jobs():
     jobs = []
 
     for co_name, domain, ref_num, lang in firms:
-        print(f"Importing {co_name} (Phenom / {domain})")
+        # print(f"Importing {co_name} (Phenom / {domain})")
         url = f"https://{domain}/widgets"
 
         offset = 0

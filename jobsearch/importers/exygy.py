@@ -9,16 +9,31 @@ careers_url = f'{root_url}/careers'
 
 
 def extract_job_links(soup):
-    # Find all anchor tags in the Open Roles section
-    # This is a simple approach; can be refined if structure changes
+    # Find all anchor tags in the Open Roles section.
+    # New Exygy careers pages use relative './job-listings/...' URLs.
     job_links = []
     for a in soup.find_all('a', href=True):
-        href = a['href']
-        # Only consider links that look like job pages (not nav/about/contact)
-        if href.startswith('/') and not any(x in href for x in ['about', 'contact', 'careers', 'privacy']):
-            text = a.get_text(strip=True)
-            if text and len(text) < 100:  # crude filter for job titles
-                job_links.append((root_url + href, text))
+        href = a['href'].strip()
+        if not href:
+            continue
+
+        # Normalize relative paths to absolute URLs.
+        if href.startswith('./'):
+            href = root_url + href[1:]
+        elif href.startswith('/'):
+            href = root_url + href
+        elif href.startswith('#') or href.startswith('mailto:') or href.startswith('tel:'):
+            continue
+        elif not href.startswith('http'):
+            href = root_url + '/' + href.lstrip('./')
+
+        # Only consider job detail links under the new job-listings section.
+        if '/job-listings/' not in href:
+            continue
+
+        text = a.get_text(strip=True)
+        if text and len(text) < 100:
+            job_links.append((href, text))
     return job_links
 
 

@@ -28,7 +28,7 @@ def get_jobs():
     for firm in firms:    
         co_name, key = firm
         try:
-            print(f"Importing {co_name}")
+            # print(f"Importing {co_name}")
             url = root_url + key
             r = fetch_response('get', url, importer_name=co_name, headers=settings.IMPORTER_HEADERS)
             if not r:
