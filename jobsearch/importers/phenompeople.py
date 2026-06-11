@@ -140,10 +140,30 @@ def get_jobs():
                     # Phenom job URLs look like:
                     #   https://jobs.fearless.com/us/en/job/FMDFABUSP100175ENUS/Mobile-Developer
                     # applyUrl may already be absolute; jobId gives us the unique key.
-                    link = job.get('applyUrl', '').strip()
-                    job_id = job.get('jobId', '').strip()
+                    # Be forgiving: accept several possible fields and derive missing values.
+                    link_raw = job.get('applyUrl') or job.get('url') or job.get('link') or ''
+                    link = (link_raw or '').strip()
 
-                    if not link or not job_id:
+                    job_id_raw = job.get('jobId') or job.get('id') or ''
+                    job_id = (job_id_raw or '').strip()
+
+                    # Normalize relative links to absolute using the domain
+                    if link and link.startswith('/'):
+                        link = f"https://{domain}{link}"
+
+                    # If job_id missing, try to extract from the link path
+                    if not job_id and link:
+                        try:
+                            job_id = link.rstrip('/').split('/')[-1]
+                        except Exception:
+                            job_id = ''
+
+                    # If link missing but we have a job_id, attempt a best-effort URL
+                    if not link and job_id:
+                        link = f"https://{domain}/job/{job_id}"
+
+                    # Skip if we still don't have at least a link
+                    if not link:
                         continue
 
                     # Location: prefer city+state, fall back to country
