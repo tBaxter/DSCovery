@@ -234,6 +234,101 @@ h1, h3 {
     .status-3 {background: #90EE90}
 }
 
+.company-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin: 1.5rem 0;
+}
+
+.company-card {
+  background: #fff;
+  border: 1px solid rgba(54, 71, 122, 0.12);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(32, 46, 90, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.company-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 42px rgba(32, 46, 90, 0.12);
+}
+
+.company-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.company-name {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.company-name a {
+  color: var(--color-primary-dark);
+  text-decoration: none;
+}
+
+.company-name a:hover {
+  text-decoration: underline;
+}
+
+.company-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.company-about {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.company-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.company-agencies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.company-agency-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.agency-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(83, 109, 180, 0.08);
+  color: var(--color-primary-dark);
+  font-size: 0.85rem;
+}
+
+.text-muted {
+  color: #6b7280;
+}
+
 .details main {
     max-width: 100ch;
     margin: auto

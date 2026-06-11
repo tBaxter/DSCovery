@@ -62,7 +62,7 @@ class CompanyListView(ListView):
     def get_queryset(self):
         return Company.objects.all().prefetch_related('agencies').annotate(
             job_count=Count('job', filter=Q(job__rejected=False))
-        ).filter(job_count__gt=0)
+        ).filter(job_count__gt=0).order_by('importer_name')
 
 
 class CompanyDetailView(DetailView):
