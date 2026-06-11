@@ -13,6 +13,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ["importer_name", "importer_type"]
+    filter_horizontal = ("agencies",)
 
 
 class JobAdmin(admin.ModelAdmin):
