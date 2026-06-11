@@ -15,7 +15,7 @@ firms = [
     ('Pluribus Digital', 'pluribusdigital'),
     ('[Simple]', 'simpletechnologysolutions'),
     ('Skylight', 'skylighthq'),
-    ('Softrams', "triafederal"),
+    # ('Softrams', "triafederal"),
     ('Inroads', 'inroads'),
     ('Truss', 'trussworksinc'),
 ]
@@ -60,7 +60,8 @@ def get_jobs():
                         # Remove extraneous child elements (tags, badges, etc.)
                         if job_title_elem:
                             for tag in job_title_elem.find_all(['span', 'badge', 'em', 'strong']):
-                                if any(cls in tag.get('class', []) for cls in ['tag', 'badge', 'new', 'featured']):
+                                classes = ' '.join(tag.get('class', [])).lower()
+                                if any(sub in classes for sub in ['tag', 'badge', 'new', 'featured']):
                                     tag.decompose()
                             # Get only the direct text (not from child elements)
                             job_title = job_title_elem.get_text(strip=True)

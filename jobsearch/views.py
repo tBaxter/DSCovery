@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -52,6 +53,17 @@ class FreshJobListView(ListView):
         fresh = datetime.now(pytz.utc) - timedelta(days=7)
         return Job.objects.filter(pub_date__gte=fresh, rejected=False)
     
+
+class CompanyListView(ListView):
+    model = Company
+    context_object_name = 'companies'
+    template_name = 'jobsearch/company_list.html'
+
+    def get_queryset(self):
+        return Company.objects.all().prefetch_related('agencies').annotate(
+            job_count=Count('job', filter=Q(job__rejected=False))
+        ).filter(job_count__gt=0)
+
 
 class CompanyDetailView(DetailView):
     model = Company

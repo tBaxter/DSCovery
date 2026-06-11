@@ -63,6 +63,7 @@
         {% for page in flatpages %}
             <li><a href="{{ page.url }}">{{ page.title }}</a></li>
         {% endfor %}
+        <li><a href="{% url 'companies_included' %}">Companies included</a></li>
         <li><a href="{% url 'new_jobs' %}">New jobs</a></li>
         <li>
           <select id="practice-select"

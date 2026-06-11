@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Companies Included{% endblock %}
+{% block extra_title %} | Companies Included{% endblock %}
+
+{% block content %}
+  <h1>Companies Included</h1>
+  <p>Below are the companies currently in the database, along with the agencies they work with and how many live job postings are visible.</p>
+
+  <table class="company-list">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Jobs</th>
+        <th>Agencies</th>
+        <th>Importer Type</th>
+        <th>About</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for company in companies %}
+        <tr class="company-row">
+          <td>
+            {% if company.get_absolute_url %}
+              <a href="{{ company.get_absolute_url }}">{{ company.importer_name }}</a>
+            {% else %}
+              {{ company.importer_name }}
+            {% endif %}
+          </td>
+          <td>{{ company.job_count }}</td>
+          <td>
+            {% if company.agencies.all %}
+              {% for agency in company.agencies.all %}
+                {{ agency.name }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ company.importer_type|default:'—' }}</td>
+          <td>{{ company.about|default:'No description available.' }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
