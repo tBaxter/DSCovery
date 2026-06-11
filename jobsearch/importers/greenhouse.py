@@ -1,43 +1,9 @@
-def map_section_to_practice(section_title):
-    section_lower = section_title.lower()
-    mappings = {
-        'engineering': 'engineering',
-        'developer': 'engineering',
-        'backend': 'engineering',
-        'frontend': 'engineering',
-        'design': 'design',
-        'ux': 'design',
-        'research': 'design',
-        'product': 'product',
-        'pm': 'product',
-        'data': 'data',
-        'analytics': 'data',
-        'business development': 'bd',
-        'sales': 'bd',
-        'marketing': 'content',
-        'content': 'content',
-        'communications': 'content',
-        'security': 'security',
-        'devops': 'engineering',
-        'infra': 'engineering',
-        'operations': 'office',
-        'finance': 'office',
-        'human resources': 'office',
-        'hr': 'office',
-        'support': 'help',
-        'customer success': 'help',
-        'cs': 'help',
-    }
-    for keyword, practice in mappings.items():
-        if keyword in section_lower:
-            return practice
-    return 'other'
 from django.conf import settings
 import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from jobsearch.importers.utils import already_in_jobs, fetch_response
+from jobsearch.importers.utils import already_in_jobs, fetch_response, map_section_to_practice
 
 root_url = 'https://boards.greenhouse.io'
 

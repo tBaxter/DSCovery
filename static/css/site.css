@@ -160,10 +160,8 @@ main {
 
 .highlighted {
   background-color: var(--color-primary-lighter);
-  margin-left: calc(-1 * (100vw - var(--max_width)) / 2);
-  margin-right: calc(-1 * (100vw - var(--max_width)) / 2);
+  margin: -1em calc(-1 * (100vw - var(--max_width)) / 2) 1em;
   padding: 1em 0 2em; /* vertical padding */
-  margin-bottom: 1em
 }
 
 .highlighted table,

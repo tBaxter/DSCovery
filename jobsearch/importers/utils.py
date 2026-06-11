@@ -28,3 +28,38 @@ def already_in_jobs(new_job, jobs):
         job['company'] == new_job['company'] and job['title'] == new_job['title']
         for job in jobs
     )
+
+def map_section_to_practice(section_title):
+    section_lower = section_title.lower()
+    mappings = {
+        'engineering': 'engineering',
+        'developer': 'engineering',
+        'backend': 'engineering',
+        'frontend': 'engineering',
+        'design': 'design',
+        'ux': 'design',
+        'research': 'design',
+        'product': 'product',
+        'pm': 'product',
+        'data': 'data',
+        'analytics': 'data',
+        'business development': 'bd',
+        'sales': 'bd',
+        'marketing': 'content',
+        'content': 'content',
+        'communications': 'content',
+        'security': 'security',
+        'devops': 'engineering',
+        'infra': 'engineering',
+        'operations': 'office',
+        'finance': 'office',
+        'human resources': 'office',
+        'hr': 'office',
+        'support': 'help',
+        'customer success': 'help',
+        'cs': 'help',
+    }
+    for keyword, practice in mappings.items():
+        if keyword in section_lower:
+            return practice
+    return 'other'
