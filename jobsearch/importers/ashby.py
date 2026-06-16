@@ -10,8 +10,9 @@ root_url = 'https://jobs.ashbyhq.com'
 
 # Name, key (Ashby subdomain)
 firms = [
+    ('Focus Consulting', 'focus'),
     ('Verdance', 'verdance'),
-    ('Mighty Acorn', 'mightyacorndigital'),  
+    ('Mighty Acorn', 'mightyacorndigital')
 ]
 
 try:
