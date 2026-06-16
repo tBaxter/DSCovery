@@ -8,6 +8,7 @@ from jobsearch.importers.utils import already_in_jobs, fetch_response
 firms = [
     ('Steampunk', 'https://careers-steampunk.icims.com/jobs/search?ss=1&hashed=-435593565'),
     ('Granicus', 'https://careers-granicus.icims.com/jobs/search'),
+    ('Valiant Solutions', 'https://careers-valiantsolutions.icims.com/jobs/search?hashed=-435594529')
 ]
 
 def get_jobs():

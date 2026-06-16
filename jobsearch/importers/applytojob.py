@@ -25,18 +25,21 @@ def get_jobs():
             continue
         soup = BeautifulSoup(r.content, "html.parser")
         job_cards = soup.find('div', class_='jobs-list').find_all('li', class_="list-group-item")
-        jobs = []
         for card in job_cards:
-            title =  card.find('h4', class_="list-group-item-heading")
-            if title is None:
+            heading = card.find(class_="list-group-item-heading")
+            if heading is None:
                 continue
-            link = title.find('a')['href']
+            link_tag = heading.find('a')
+            if not link_tag or not link_tag.get('href'):
+                continue
+            link = link_tag['href'].strip()
+            location = card.find('ul', class_="list-inline")
             jobs.append({
                 'company': co_name,
-                'title': title.text.strip(),
+                'title': link_tag.text.strip(),
                 'link': link,
                 'job_id': link.rsplit('/')[-2],
-                'location': card.find('ul', class_="list-inline").text.strip(),
+                'location': location.text.strip() if location is not None else '',
                 'pub_date': datetime.date.today()
             })
     return jobs
