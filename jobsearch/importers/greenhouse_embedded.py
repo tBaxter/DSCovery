@@ -1,7 +1,7 @@
 from django.conf import settings
 import datetime
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 from jobsearch.importers.utils import already_in_jobs, fetch_response
 
@@ -60,9 +60,19 @@ def get_jobs():
                         # Remove extraneous child elements (tags, badges, etc.)
                         if job_title_elem:
                             for tag in job_title_elem.find_all(['span', 'badge', 'em', 'strong']):
-                                classes = ' '.join(tag.get('class', [])).lower()
+                                # defensive: ensure we have a Tag (not a string/comment)
+                                if not isinstance(tag, Tag):
+                                    continue
+                                classes_list = tag.get('class') or []
+                                try:
+                                    classes = ' '.join(classes_list).lower()
+                                except Exception:
+                                    classes = ''
                                 if any(sub in classes for sub in ['tag', 'badge', 'new', 'featured']):
-                                    tag.decompose()
+                                    try:
+                                        tag.decompose()
+                                    except Exception:
+                                        pass
                             # Get only the direct text (not from child elements)
                             job_title = job_title_elem.get_text(strip=True)
                         else:

@@ -3,6 +3,8 @@ import datetime
 import re
 from bs4 import BeautifulSoup
 from jobsearch.importers.utils import already_in_jobs, fetch_response
+import json
+from urllib.parse import urljoin
 
 # Name, career board URL
 firms = [
@@ -25,24 +27,112 @@ def get_jobs():
             continue
         
         soup = BeautifulSoup(r.content, "html.parser")
+
+        # First, try to extract embedded JSON (jobImpressions / jobImpressionData)
+        found_json = False
+        for s in soup.find_all('script'):
+            script_text = s.string or s.text or ''
+            if 'jobImpressions' in script_text or 'jobImpression' in script_text:
+                # attempt to locate a JSON object/array after the key
+                m = re.search(r'(jobImpressions|jobImpressionData)\s*=\s*(\[.*?\]|\{.*?\})(;|\n)', script_text, re.S)
+                if not m:
+                    m = re.search(r'(jobImpressions|jobImpressionData)\W*(\[.*?\]|\{.*?\})', script_text, re.S)
+                if m:
+                    js_text = m.group(2)
+                    try:
+                        data = json.loads(js_text)
+                    except Exception:
+                        # fall back: try to locate a JSON array inside the script (brute-force)
+                        arr_m = re.search(r'(\[\s*\{.*?\}\s*\])', script_text, re.S)
+                        if arr_m:
+                            try:
+                                data = json.loads(arr_m.group(1))
+                            except Exception:
+                                data = None
+                        else:
+                            data = None
+
+                    if data:
+                        found_json = True
+                        # data may be a dict with impressions/data keys or a list
+                        items = []
+                        if isinstance(data, dict):
+                            if 'impressions' in data:
+                                items = data['impressions']
+                            elif 'data' in data and isinstance(data['data'], list):
+                                items = data['data']
+                            else:
+                                # try common nesting
+                                for v in data.values():
+                                    if isinstance(v, list):
+                                        items = v
+                                        break
+                        elif isinstance(data, list):
+                            items = data
+
+                        for item in items:
+                            try:
+                                # item structures vary; map common fields
+                                job_id = str(item.get('id') or item.get('idRaw') or item.get('jobId') or '')
+                                title = item.get('title') or item.get('jobTitle') or item.get('name') or ''
+                                location = item.get('location') or item.get('jobLocation') or item.get('locationName') or 'Unknown'
+                                link = item.get('absolute_url') or item.get('url') or item.get('absoluteUrl') or item.get('applyUrl') or ''
+                                # normalize link
+                                if link and link.startswith('//'):
+                                    link = 'https:' + link
+                                if link and link.startswith('/'):
+                                    link = urljoin(url, link)
+
+                                pub_date = datetime.date.today()
+                                pd = item.get('postedDate') or item.get('posted') or item.get('date')
+                                if pd:
+                                    try:
+                                        pub_date = datetime.datetime.strptime(pd, '%Y-%m-%d').date()
+                                    except Exception:
+                                        try:
+                                            pub_date = datetime.datetime.strptime(pd, '%m/%d/%Y').date()
+                                        except Exception:
+                                            pass
+
+                                if not title:
+                                    continue
+
+                                new_job = {
+                                    'company': company_name,
+                                    'job_id': job_id or link.rsplit('/', 1)[-1],
+                                    'title': title,
+                                    'link': link,
+                                    'location': location,
+                                    'pub_date': pub_date
+                                }
+                                if not already_in_jobs(new_job, jobs):
+                                    jobs.append(new_job)
+                            except Exception:
+                                continue
+                        break
+
+        if found_json:
+            continue
+
+        # Fallback: old DOM parsing
         job_cards = soup.find_all('li', class_='iCIMS_JobCardItem')
-        
+
         for card in job_cards:
             # Extract job title from the anchor tag
             title_elem = card.find('a')
             if not title_elem:
                 continue
-            
+
             title = title_elem.get_text(strip=True).replace('Job Title', '').strip()
             link = title_elem.get('href', '')
-            
+
             if not title or not link:
                 continue
-            
+
             # Extract job_id from the URL
             job_id_match = re.search(r'/jobs/(\d+)/', link)
             job_id = job_id_match.group(1) if job_id_match else link.rsplit('/')[-1]
-            
+
             # Extract location
             location_elem = card.find('span', string=re.compile('Job Location'))
             location = 'Unknown'
@@ -50,7 +140,7 @@ def get_jobs():
                 loc_span = location_elem.find_next('span')
                 if loc_span:
                     location = loc_span.get_text(strip=True)
-            
+
             # Extract posted date
             pub_date = datetime.date.today()
             posted_elem = card.find('span', string=re.compile('Posted Date'))
@@ -63,7 +153,7 @@ def get_jobs():
                             pub_date = datetime.datetime.strptime(date_str, '%m/%d/%Y %I:%M %p').date()
                         except:
                             pass
-            
+
             new_job = {
                 'company': company_name,
                 'job_id': job_id,
@@ -72,7 +162,7 @@ def get_jobs():
                 'location': location,
                 'pub_date': pub_date
             }
-            
+
             if not already_in_jobs(new_job, jobs):
                 jobs.append(new_job)
     

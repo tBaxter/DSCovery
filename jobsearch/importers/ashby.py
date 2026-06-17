@@ -34,7 +34,7 @@ def get_jobs():
         # Try simple scraping first
         try:
             co_jobs = _get_jobs_via_scraping(url, co_name)
-            print(f"Scraping found {len(co_jobs)} jobs for {co_name}")
+            # print(f"Scraping found {len(co_jobs)} jobs for {co_name}")
             if co_jobs:
                 jobs.extend(co_jobs)
                 continue
@@ -45,7 +45,7 @@ def get_jobs():
         if playwright_available:
             try:
                 co_jobs = _get_jobs_via_playwright(url, co_name)
-                print(f"Playwright found {len(co_jobs)} jobs for {co_name}")
+                # print(f"Playwright found {len(co_jobs)} jobs for {co_name}")
                 if co_jobs:
                     jobs.extend(co_jobs)
             except Exception as e:
