@@ -32,21 +32,21 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = [
         "importer_name",
         "link",
-        "importer_type",
+        "classification",
         "overall_score",
         "delivery_score",
         "viability_score",
         "reputation_score",
         "service_maturity_score",
+        "evaluation_summary",
     ]
-    # show computed classification (read-only) in the list view
-    list_display.insert(3, "classification")
     list_editable = [
-        "overall_score",
         "delivery_score",
         "viability_score",
         "reputation_score",
         "service_maturity_score",
+        "evaluation_summary",
+
     ]
     filter_horizontal = ("agencies",)
 
