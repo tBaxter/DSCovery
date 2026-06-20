@@ -83,6 +83,15 @@ class Company(models.Model):
     affiliations = models.ManyToManyField(Group, blank=True)
     importer_type = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=True)
+    delivery_score = models.FloatField(blank=True, null=True)
+    viability_score = models.FloatField(blank=True, null=True)
+    reputation_score = models.FloatField(blank=True, null=True)
+    service_maturity_score = models.FloatField(blank=True, null=True)
+    overall_score = models.FloatField(blank=True, null=True)
+    evaluation_summary = models.TextField(blank=True, null=True)
+    evaluation_evidence = models.TextField(blank=True, null=True)
+    evaluation_date = models.DateField(blank=True, null=True)
+    framework_version = models.CharField(max_length=255, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
     agencies = models.ManyToManyField(Agency, blank=True)
 
@@ -94,8 +103,74 @@ class Company(models.Model):
         return self.importer_name
     
     def save(self, *args, **kwargs):
-        self.slug= slugify(self.importer_name)
-        super(Company, self).save(*args, **kwargs)    
+        self.slug = slugify(self.importer_name)
+        super(Company, self).save(*args, **kwargs)
+
+    def get_classification(self):
+        """Return the calculated evaluation classification based on manual scores."""
+        scores = (
+            self.overall_score,
+            self.viability_score,
+            self.delivery_score,
+            self.reputation_score,
+            self.service_maturity_score,
+        )
+
+        if not any(value is not None for value in scores):
+            return None
+
+        if self._is_leading_practice():
+            return "leading_practice"
+
+        if self._is_strong_practice():
+            return "strong_practice"
+
+        if self._is_remove():
+            return "remove"
+
+        return "watch"
+
+    @property
+    def classification(self):
+        return self.get_classification()
+
+    @property
+    def display_classification(self):
+        classification = self.get_classification()
+        if classification in {"leading_practice", "strong_practice"}:
+            return classification
+        return None
+
+    def _is_leading_practice(self):
+        return (
+            self.overall_score is not None
+            and self.overall_score >= 20
+            and self.viability_score is not None
+            and self.viability_score > 3
+            and self.delivery_score is not None
+            and self.delivery_score >= 6
+            and self.reputation_score is not None
+            and self.reputation_score >= 6
+        )
+
+    def _is_strong_practice(self):
+        return (
+            self.overall_score is not None
+            and self.overall_score >= 10
+            and self.viability_score is not None
+            and self.viability_score >= 1
+            and self.reputation_score is not None
+            and self.reputation_score >= 4
+        )
+
+    def _is_remove(self):
+        return any(
+            [
+                self.overall_score is not None and self.overall_score <= 1,
+                self.viability_score is not None and self.viability_score < 6,
+                self.reputation_score is not None and self.reputation_score < -1,
+            ]
+        )
 
     def get_absolute_url(self):
         return reverse("company_detail", kwargs={"slug": self.slug})
