@@ -104,6 +104,18 @@ class Company(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.importer_name)
+        
+        # Calculate overall_score as the sum of component scores
+        scores = [
+            self.delivery_score,
+            self.viability_score,
+            self.reputation_score,
+            self.service_maturity_score,
+        ]
+        non_null_scores = [s for s in scores if s is not None]
+        if non_null_scores:
+            self.overall_score = sum(non_null_scores)
+        
         super(Company, self).save(*args, **kwargs)
 
     def get_classification(self):
