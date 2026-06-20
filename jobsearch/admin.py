@@ -29,7 +29,25 @@ class CompanyForm(forms.ModelForm):
 
 class CompanyAdmin(admin.ModelAdmin):
     form = CompanyForm
-    list_display = ["importer_name", "link", "importer_type"]
+    list_display = [
+        "importer_name",
+        "link",
+        "importer_type",
+        "overall_score",
+        "delivery_score",
+        "viability_score",
+        "reputation_score",
+        "service_maturity_score",
+    ]
+    # show computed classification (read-only) in the list view
+    list_display.insert(3, "classification")
+    list_editable = [
+        "overall_score",
+        "delivery_score",
+        "viability_score",
+        "reputation_score",
+        "service_maturity_score",
+    ]
     filter_horizontal = ("agencies",)
 
     def link(self, obj):
@@ -40,6 +58,11 @@ class CompanyAdmin(admin.ModelAdmin):
             return obj.co_link
         return ''
     link.short_description = 'link'
+
+    def classification(self, obj):
+        # show the computed classification (use full classification here)
+        return obj.classification or ''
+    classification.short_description = 'classification'
 
 
 class JobAdmin(admin.ModelAdmin):
