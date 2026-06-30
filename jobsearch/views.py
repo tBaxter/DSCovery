@@ -19,6 +19,20 @@ from .forms import JobStatusForm
 from .models import Job, Company, PRACTICE_CHOICES
 
 
+def delete_stale_jobs(user, imported_jobs):
+    """Delete jobs that were not seen in the current import cycle."""
+    active_job_keys = {
+        (job['company'], job['job_id'])
+        for job in imported_jobs
+        if job.get('job_id')
+    }
+
+    for job in Job.objects.filter(user=user):
+        job_key = (job.new_company.importer_name if job.new_company else None, job.job_id)
+        if job_key not in active_job_keys:
+            job.delete()
+
+
 class JobListView(ListView):
     model = Company
     context_object_name = "companies"
@@ -86,43 +100,6 @@ def import_jobs(request):
     """
     user = request.user
     importers_dir = os.path.join(os.path.dirname(__file__), 'importers')
-    # Any job more than 21 days old is old and deleted without checking 
-    # if it's still posted. If it is, it will just get re-imported.
-    expire_date = datetime.now(pytz.utc) - timedelta(days=21)
-    # Jobs past this date have been around a little while, 
-    # so we need to check if they're still valid.
-    # To reduce load, we don't check any jobs newer than this
-    check_date = datetime.now(pytz.utc) - timedelta(days=14)
-    
-    deleted = 0
-    for job in Job.objects.filter(pub_date__lte=check_date):
-        # TO-DO: we're fixing some naive datetimes here.
-        # That should probably happen in the importers.
-        pub_date = job.pub_date
-        if not pub_date.tzinfo:
-            pub_date = pytz.utc.localize(pub_date)
-        
-        # First, if the job is past the expiration date, just delete it.
-        if pub_date <= expire_date:
-            job.delete()
-            deleted += 1
-            continue
-        
-        # now, for the ones past check date (above) but not yet to expire
-        # we'll ping the job and see if we get a 200. If not, delete it.
-        # we don't bother doing this in debug because it's too intensive.
-        if settings.DEBUG is False:
-            try:
-                r = requests.get(job.link, headers=settings.IMPORTER_HEADERS, timeout=1)
-                if r.status_code != 200:
-                    print("Failed to find job, deleting: ", job, r.status_code)
-                    job.delete()
-                    continue
-            except Exception as e:
-                print('Failed to ping job, deleting', job, e)
-                job.delete()
-                continue
-        # TO-DO: Build in detail getters here
 
     jobs = []
     # load all importer modules, respecting optional PRIORITY attribute
@@ -177,8 +154,6 @@ def import_jobs(request):
         company, created = Company.objects.get_or_create(importer_name=job['company'])
         if (job['title'], job['company']) not in existing_jobs:
             try:
-                #print("importing ", job['company'], job['title'])
-                
                 newjob = Job (
                     title = job['title'],
                     link = job['link'],
@@ -192,6 +167,8 @@ def import_jobs(request):
             except Exception as e:
                 print("failed to import", job, e)
                 print("job:", job['title'], job['link'], job['company'], job['company'], job['location'],  job['pub_date'], job['job_id'])
+
+    delete_stale_jobs(user, jobs)
     return HttpResponseRedirect(reverse('jobs'))
 
 
